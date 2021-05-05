@@ -1,0 +1,4 @@
+../../chrome/android/webapk/libs/client/src/org/chromium/webapk/lib/client/DexOptimizer.java
+../../chrome/android/webapk/libs/client/src/org/chromium/webapk/lib/client/WebApkNavigationClient.java
+../../chrome/android/webapk/libs/client/src/org/chromium/webapk/lib/client/WebApkServiceConnectionManager.java
+../../chrome/android/webapk/libs/client/src/org/chromium/webapk/lib/client/WebApkValidator.java

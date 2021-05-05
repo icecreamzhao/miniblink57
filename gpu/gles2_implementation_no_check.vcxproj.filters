@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\client">
+      <UniqueIdentifier>{D5E3C9B9-F4E5-9856-CE8C-F9B03683EBB9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="command_buffer\client\buffer_tracker.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\buffer_tracker.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\client_context_state.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\client_context_state.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\client_context_state_autogen.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\client_context_state_impl_autogen.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\gles2_impl_export.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\gles2_implementation.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\gles2_implementation.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\gles2_implementation_autogen.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\gles2_implementation_impl_autogen.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\gles2_interface.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\gles2_trace_implementation.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\gles2_trace_implementation.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\gles2_trace_implementation_autogen.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClInclude Include="command_buffer\client\gles2_trace_implementation_impl_autogen.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\gpu_switches.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\gpu_switches.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\program_info_manager.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\program_info_manager.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\query_tracker.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\query_tracker.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\share_group.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\share_group.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <ClCompile Include="command_buffer\client\vertex_array_object_manager.cc">
+      <Filter>command_buffer\client</Filter>
+    </ClCompile>
+    <ClInclude Include="command_buffer\client\vertex_array_object_manager.h">
+      <Filter>command_buffer\client</Filter>
+    </ClInclude>
+    <None Include="gpu.gyp"/>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+./lib_tracing_perftests__library.so
+../../testing/scripts/common.py
+../../testing/xvfb.py
+../../testing/scripts/run_gtest_perf_test.py
+../../tools/perf/generate_legacy_perf_dashboard_json.py
+../../testing/test_env.py

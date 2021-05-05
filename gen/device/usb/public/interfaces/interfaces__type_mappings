@@ -1,0 +1,17 @@
+{
+  "c++": {
+    "device.usb.DeviceFilter": {
+      "hashable": false, 
+      "typename": "device::UsbDeviceFilter", 
+      "traits_headers": [
+        "device/usb/public/interfaces/device_manager_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "device/usb/usb_device_filter.h"
+      ]
+    }
+  }
+}

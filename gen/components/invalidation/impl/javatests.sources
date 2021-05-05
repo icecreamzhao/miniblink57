@@ -1,0 +1,2 @@
+../../components/invalidation/impl/android/javatests/src/org/chromium/components/invalidation/InvalidationClientServiceTest.java
+../../components/invalidation/impl/android/javatests/src/org/chromium/components/invalidation/TestableInvalidationClientService.java

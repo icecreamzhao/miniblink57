@@ -1,0 +1,3 @@
+./lib_courgette_unittests__library.so
+../../courgette/testdata/
+../../testing/test_env.py

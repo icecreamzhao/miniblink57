@@ -1,0 +1,9 @@
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/CustomTabsCallback.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/CustomTabsClient.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/CustomTabsIntent.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/CustomTabsService.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/CustomTabsServiceConnection.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/CustomTabsSession.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/CustomTabsSessionToken.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/PostMessageService.java
+../../third_party/custom_tabs_client/src/customtabs/src/android/support/customtabs/PostMessageServiceConnection.java

@@ -1,0 +1,7 @@
+../../base/android/javatests/src/org/chromium/base/AdvancedMockContextTest.java
+../../base/android/javatests/src/org/chromium/base/ApiCompatibilityUtilsTest.java
+../../base/android/javatests/src/org/chromium/base/CommandLineInitUtilTest.java
+../../base/android/javatests/src/org/chromium/base/CommandLineTest.java
+../../base/android/javatests/src/org/chromium/base/LocaleUtilsTest.java
+../../base/android/javatests/src/org/chromium/base/ObserverListTest.java
+../../base/android/javatests/src/org/chromium/base/metrics/RecordHistogramTest.java

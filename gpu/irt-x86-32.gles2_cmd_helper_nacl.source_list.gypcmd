@@ -1,0 +1,3 @@
+command_buffer/client/gles2_cmd_helper.cc
+command_buffer/client/gles2_cmd_helper.h
+command_buffer/client/gles2_cmd_helper_autogen.h

@@ -1,0 +1,3 @@
+../../third_party/robolectric/template_processor/src/org/chromium/testing/robolectric/template/ProcessRobolectricTemplate.java
+../../third_party/robolectric/template_processor/src/org/chromium/testing/robolectric/template/ProcessTemplateArgParser.java
+../../third_party/robolectric/template_processor/src/org/chromium/testing/robolectric/template/TemplateFileInfo.java

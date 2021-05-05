@@ -1,0 +1,585 @@
+{
+  "c++": {
+    "gpu.mojom.GpuPreferences": {
+      "hashable": false, 
+      "typename": "gpu::GpuPreferences", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_preferences_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/command_buffer/service/gpu_preferences.h"
+      ]
+    }, 
+    "gpu.mojom.VideoDecodeAcceleratorSupportedProfile": {
+      "hashable": false, 
+      "typename": "gpu::VideoDecodeAcceleratorSupportedProfile", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/gpu_info.h"
+      ]
+    }, 
+    "gfx.mojom.InsetsF": {
+      "hashable": false, 
+      "typename": "gfx::InsetsF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gpu.mojom.Mailbox": {
+      "hashable": false, 
+      "typename": "gpu::Mailbox", 
+      "traits_headers": [
+        "gpu/ipc/common/mailbox_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/command_buffer/common/mailbox.h"
+      ]
+    }, 
+    "gpu.mojom.GpuInfo": {
+      "hashable": false, 
+      "typename": "gpu::GPUInfo", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/gpu_info.h"
+      ]
+    }, 
+    "mojo.common.mojom.UnguessableToken": {
+      "hashable": false, 
+      "typename": "base::UnguessableToken", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/unguessable_token.h"
+      ]
+    }, 
+    "gfx.mojom.PointF": {
+      "hashable": false, 
+      "typename": "gfx::PointF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gfx.mojom.Vector2d": {
+      "hashable": false, 
+      "typename": "gfx::Vector2d", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gpu.mojom.GpuDevice": {
+      "hashable": false, 
+      "typename": "gpu::GPUInfo::GPUDevice", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/gpu_info.h"
+      ]
+    }, 
+    "gpu.mojom.SurfaceHandle": {
+      "hashable": false, 
+      "typename": "::gpu::SurfaceHandle", 
+      "traits_headers": [
+        "gpu/ipc/common/surface_handle_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": true, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/ipc/common/surface_handle.h"
+      ]
+    }, 
+    "gpu.mojom.Capabilities": {
+      "hashable": false, 
+      "typename": "gpu::Capabilities", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_command_buffer_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/command_buffer/common/capabilities.h"
+      ]
+    }, 
+    "mojo.common.mojom.TimeTicks": {
+      "hashable": false, 
+      "typename": "base::TimeTicks", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": true, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/time/time.h"
+      ]
+    }, 
+    "mojo.common.mojom.Value": {
+      "hashable": false, 
+      "typename": "std::unique_ptr<base::Value>", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "gpu.mojom.VpxDecodeVendors": {
+      "hashable": false, 
+      "typename": "gpu::GpuPreferences::VpxDecodeVendors", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_preferences_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/command_buffer/service/gpu_preferences.h"
+      ]
+    }, 
+    "mojo.common.mojom.File": {
+      "hashable": false, 
+      "typename": "base::File", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/files/file.h"
+      ]
+    }, 
+    "gpu.mojom.MailboxHolder": {
+      "hashable": false, 
+      "typename": "::gpu::MailboxHolder", 
+      "traits_headers": [
+        "gpu/ipc/common/mailbox_holder_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/command_buffer/common/mailbox_holder.h"
+      ]
+    }, 
+    "gpu.mojom.VideoEncodeAcceleratorSupportedProfile": {
+      "hashable": false, 
+      "typename": "gpu::VideoEncodeAcceleratorSupportedProfile", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/gpu_info.h"
+      ]
+    }, 
+    "gfx.mojom.SizeF": {
+      "hashable": false, 
+      "typename": "gfx::SizeF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "mojo.common.mojom.LegacyListValue": {
+      "hashable": false, 
+      "typename": "base::ListValue", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "gfx.mojom.RectF": {
+      "hashable": false, 
+      "typename": "gfx::RectF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "mojo.common.mojom.TextDirection": {
+      "hashable": false, 
+      "typename": "base::i18n::TextDirection", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/i18n/rtl.h"
+      ]
+    }, 
+    "mojo.common.mojom.ListValue": {
+      "hashable": false, 
+      "typename": "std::unique_ptr<base::ListValue>", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "gpu.mojom.VideoDecodeAcceleratorCapabilities": {
+      "hashable": false, 
+      "typename": "gpu::VideoDecodeAcceleratorCapabilities", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/gpu_info.h"
+      ]
+    }, 
+    "gfx.mojom.Vector2dF": {
+      "hashable": false, 
+      "typename": "gfx::Vector2dF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "mojo.common.mojom.Time": {
+      "hashable": false, 
+      "typename": "base::Time", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": true, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/time/time.h"
+      ]
+    }, 
+    "gfx.mojom.Insets": {
+      "hashable": false, 
+      "typename": "gfx::Insets", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gfx.mojom.Size": {
+      "hashable": false, 
+      "typename": "gfx::Size", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gfx.mojom.Point": {
+      "hashable": false, 
+      "typename": "gfx::Point", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gpu.mojom.CollectInfoResult": {
+      "hashable": false, 
+      "typename": "gpu::CollectInfoResult", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/gpu_info.h"
+      ]
+    }, 
+    "gpu.mojom.DxDiagNode": {
+      "hashable": false, 
+      "typename": "gpu::DxDiagNode", 
+      "traits_headers": [
+        "gpu/ipc/common/dx_diag_node_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/dx_diag_node.h"
+      ]
+    }, 
+    "gpu.mojom.VideoCodecProfile": {
+      "hashable": false, 
+      "typename": "gpu::VideoCodecProfile", 
+      "traits_headers": [
+        "gpu/ipc/common/gpu_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/config/gpu_info.h"
+      ]
+    }, 
+    "mojo.common.mojom.Version": {
+      "hashable": false, 
+      "typename": "base::Version", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/version.h"
+      ]
+    }, 
+    "mojo.common.mojom.String16": {
+      "hashable": false, 
+      "typename": "base::string16", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/strings/string16.h"
+      ]
+    }, 
+    "gpu.mojom.SyncToken": {
+      "hashable": false, 
+      "typename": "::gpu::SyncToken", 
+      "traits_headers": [
+        "gpu/ipc/common/sync_token_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "gpu/command_buffer/common/sync_token.h"
+      ]
+    }, 
+    "mojo.common.mojom.TimeDelta": {
+      "hashable": false, 
+      "typename": "base::TimeDelta", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": true, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/time/time.h"
+      ]
+    }, 
+    "mojo.common.mojom.FilePath": {
+      "hashable": false, 
+      "typename": "base::FilePath", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/files/file_path.h"
+      ]
+    }, 
+    "mojo.common.mojom.DictionaryValue": {
+      "hashable": false, 
+      "typename": "std::unique_ptr<base::DictionaryValue>", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "gfx.mojom.Rect": {
+      "hashable": false, 
+      "typename": "gfx::Rect", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }
+  }
+}

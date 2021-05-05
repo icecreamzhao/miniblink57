@@ -1,0 +1,8 @@
+../../base/android/junit/src/org/chromium/base/BaseChromiumApplicationTest.java
+../../base/android/junit/src/org/chromium/base/LogTest.java
+../../base/android/junit/src/org/chromium/base/NonThreadSafeTest.java
+../../base/android/junit/src/org/chromium/base/PromiseTest.java
+../../base/test/android/junit/src/org/chromium/base/test/util/DisableIfTest.java
+../../base/test/android/junit/src/org/chromium/base/test/util/MinAndroidSdkLevelSkipCheckTest.java
+../../base/test/android/junit/src/org/chromium/base/test/util/RestrictionSkipCheckTest.java
+../../base/test/android/junit/src/org/chromium/base/test/util/SkipCheckTest.java

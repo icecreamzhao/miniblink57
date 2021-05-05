@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="perftests">
+      <UniqueIdentifier>{90AC75C5-A3E3-A480-A72E-10D4E0AB7CFC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="perftests">
+      <UniqueIdentifier>{90AC75C5-A3E3-A480-A72E-10D4E0AB7CFC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="perftests">
+      <UniqueIdentifier>{90AC75C5-A3E3-A480-A72E-10D4E0AB7CFC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="perftests\measurements.cc">
+      <Filter>perftests</Filter>
+    </ClCompile>
+    <ClCompile Include="perftests\run_all_tests.cc">
+      <Filter>perftests</Filter>
+    </ClCompile>
+    <ClCompile Include="perftests\texture_upload_perftest.cc">
+      <Filter>perftests</Filter>
+    </ClCompile>
+    <None Include="gpu.gyp"/>
+  </ItemGroup>
+</Project>

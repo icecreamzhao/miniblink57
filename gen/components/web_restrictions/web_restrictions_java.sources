@@ -1,0 +1,3 @@
+../../components/web_restrictions/browser/java/src/org/chromium/components/webrestrictions/browser/WebRestrictionsContentProvider.java
+../../components/web_restrictions/browser/java/src/org/chromium/components/webrestrictions/browser/WebRestrictionsClient.java
+../../components/web_restrictions/browser/java/src/org/chromium/components/webrestrictions/browser/WebRestrictionsClientResult.java

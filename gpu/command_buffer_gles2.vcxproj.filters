@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="gles2_conform_support">
+      <UniqueIdentifier>{E521ACEE-F97E-468F-6918-8CE0C7F32E8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support\egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support">
+      <UniqueIdentifier>{E521ACEE-F97E-468F-6918-8CE0C7F32E8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support\egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support">
+      <UniqueIdentifier>{E521ACEE-F97E-468F-6918-8CE0C7F32E8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support\egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support">
+      <UniqueIdentifier>{E521ACEE-F97E-468F-6918-8CE0C7F32E8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support\egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support">
+      <UniqueIdentifier>{E521ACEE-F97E-468F-6918-8CE0C7F32E8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support\egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support">
+      <UniqueIdentifier>{E521ACEE-F97E-468F-6918-8CE0C7F32E8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support\egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support">
+      <UniqueIdentifier>{E521ACEE-F97E-468F-6918-8CE0C7F32E8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gles2_conform_support\egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="gles2_conform_support\egl\config.cc">
+      <Filter>gles2_conform_support\egl</Filter>
+    </ClCompile>
+    <ClInclude Include="gles2_conform_support\egl\config.h">
+      <Filter>gles2_conform_support\egl</Filter>
+    </ClInclude>
+    <ClCompile Include="gles2_conform_support\egl\display.cc">
+      <Filter>gles2_conform_support\egl</Filter>
+    </ClCompile>
+    <ClInclude Include="gles2_conform_support\egl\display.h">
+      <Filter>gles2_conform_support\egl</Filter>
+    </ClInclude>
+    <ClCompile Include="gles2_conform_support\egl\egl.cc">
+      <Filter>gles2_conform_support\egl</Filter>
+    </ClCompile>
+    <ClCompile Include="gles2_conform_support\egl\surface.cc">
+      <Filter>gles2_conform_support\egl</Filter>
+    </ClCompile>
+    <ClInclude Include="gles2_conform_support\egl\surface.h">
+      <Filter>gles2_conform_support\egl</Filter>
+    </ClInclude>
+    <None Include="gpu.gyp"/>
+  </ItemGroup>
+</Project>

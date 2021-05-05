@@ -1,0 +1,8 @@
+./lib_media_perftests__library.so
+../../media/test/data/
+../../testing/scripts/common.py
+../../testing/xvfb.py
+../../testing/scripts/run_gtest_perf_test.py
+../../tools/perf/generate_legacy_perf_dashboard_json.py
+gen/ipc/ipc.mojom.js
+../../testing/test_env.py

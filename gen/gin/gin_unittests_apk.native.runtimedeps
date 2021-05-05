@@ -1,0 +1,9 @@
+./lib_gin_unittests__library.so
+../../gin/modules/module_registry_unittests.js
+../../gin/shell/hello_world.js
+../../gin/test/file_unittests.js
+../../gin/test/gtest_unittests.js
+../../OWNERS
+./gin_shell
+../../gin/test/expect.js
+../../testing/test_env.py

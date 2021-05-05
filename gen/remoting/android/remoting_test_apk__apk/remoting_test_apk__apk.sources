@@ -1,0 +1,8 @@
+../../remoting/android/javatests/src/org/chromium/chromoting/EventTest.java
+../../remoting/android/javatests/src/org/chromium/chromoting/MockInputStub.java
+../../remoting/android/javatests/src/org/chromium/chromoting/SwipePinchDetectorTest.java
+../../remoting/android/javatests/src/org/chromium/chromoting/TapGestureDetectorTest.java
+../../remoting/android/javatests/src/org/chromium/chromoting/TouchEventBuilder.java
+../../remoting/android/javatests/src/org/chromium/chromoting/TouchEventGenerator.java
+../../remoting/android/javatests/src/org/chromium/chromoting/TouchInputStrategyTest.java
+../../remoting/android/javatests/src/org/chromium/chromoting/test/util/MutableReference.java

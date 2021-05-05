@@ -1,0 +1,17 @@
+{
+  "c++": {
+    "bluetooth.mojom.UUID": {
+      "hashable": false, 
+      "typename": "device::BluetoothUUID", 
+      "traits_headers": [
+        "device/bluetooth/public/interfaces/uuid_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "device/bluetooth/bluetooth_uuid.h"
+      ]
+    }
+  }
+}

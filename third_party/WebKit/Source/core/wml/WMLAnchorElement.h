@@ -1,0 +1,60 @@
+/**
+ * Copyright (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ *
+ */
+
+#ifndef WMLAnchorElement_h
+#define WMLAnchorElement_h
+
+#if ENABLE_WML
+#include "WMLAElement.h"
+#ifdef TENCENT_CHANGES
+#include <vector>
+#endif
+
+namespace blink {
+
+class WMLTaskElement;
+
+class WMLAnchorElement : public WMLAElement {
+public:
+    DECLARE_NODE_FACTORY(WMLAnchorElement);
+
+    WMLAnchorElement(Document&);
+    virtual ~WMLAnchorElement() override;
+
+    virtual void defaultEventHandler(Event*) override;
+
+    DECLARE_VIRTUAL_TRACE();
+
+private:
+    friend class WMLTaskElement;
+    void registerTask(WMLTaskElement*);
+    void deregisterTask(WMLTaskElement*);
+
+#ifdef TENCENT_CHANGES
+    std::vector<WMLTaskElement*> m_taskList;
+#else
+    WMLTaskElement* m_task;
+#endif
+};
+
+}
+
+#endif
+#endif

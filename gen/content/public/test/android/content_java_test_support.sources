@@ -1,0 +1,17 @@
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/NativeLibraryTestBase.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/ApplicationUtils.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/Criteria.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/CriteriaHelper.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/DOMUtils.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/EqualityCriteria.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/HistoryUtils.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/JavaScriptUtils.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/KeyUtils.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/RenderProcessLimit.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/TestCallbackHelperContainer.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/TestContentViewClient.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/TestInputMethodManagerWrapper.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/TestTouchUtils.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/TestWebContentsObserver.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/TouchCommon.java
+../../content/public/test/android/javatests/src/org/chromium/content/browser/test/util/UiUtils.java

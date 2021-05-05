@@ -1,0 +1,4 @@
+./lib_ipc_perftests__library.so
+gen/ipc/ipc.mojom.js
+gen/ipc/ipc_test.mojom.js
+../../testing/test_env.py

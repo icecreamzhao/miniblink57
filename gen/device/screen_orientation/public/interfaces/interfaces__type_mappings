@@ -1,0 +1,17 @@
+{
+  "c++": {
+    "device.mojom.ScreenOrientationLockType": {
+      "hashable": false, 
+      "typename": "::blink::WebScreenOrientationLockType", 
+      "traits_headers": [
+        "third_party/WebKit/public/platform/modules/screen_orientation/WebScreenOrientationEnumTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/modules/screen_orientation/WebScreenOrientationLockType.h"
+      ]
+    }
+  }
+}

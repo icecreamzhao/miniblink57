@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="command_buffer\service">
+      <UniqueIdentifier>{C9210780-0906-CC9E-BEC1-0AB6BFD1B977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\tools\protoc_wrapper">
+      <UniqueIdentifier>{34D2DD54-FDF8-D9D8-4C83-CA01DBAC57A6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)">
+      <UniqueIdentifier>{ECA95933-7FA6-5798-4EC4-C0CAC6DD34DE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)">
+      <UniqueIdentifier>{ECA95933-7FA6-5798-4EC4-C0CAC6DD34DE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)\pyproto">
+      <UniqueIdentifier>{A5155811-51E5-1087-45BA-D2802E9B53B2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)\pyproto\gpu">
+      <UniqueIdentifier>{52E8B949-3E67-CAB7-33D9-3F972FED789B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)\pyproto\gpu\command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)\pyproto\gpu\command_buffer\service">
+      <UniqueIdentifier>{C9210780-0906-CC9E-BEC1-0AB6BFD1B977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen">
+      <UniqueIdentifier>{B54385DA-9AA0-82F8-3CCF-636B21B5C41E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out">
+      <UniqueIdentifier>{456EFA50-5ADA-2D4B-BB76-1BD6B9BCA3A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out\gpu">
+      <UniqueIdentifier>{52E8B949-3E67-CAB7-33D9-3F972FED789B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out\gpu\command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out\gpu\command_buffer\service">
+      <UniqueIdentifier>{C9210780-0906-CC9E-BEC1-0AB6BFD1B977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen">
+      <UniqueIdentifier>{B54385DA-9AA0-82F8-3CCF-636B21B5C41E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out">
+      <UniqueIdentifier>{456EFA50-5ADA-2D4B-BB76-1BD6B9BCA3A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out\gpu">
+      <UniqueIdentifier>{52E8B949-3E67-CAB7-33D9-3F972FED789B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out\gpu\command_buffer">
+      <UniqueIdentifier>{05C7F72F-ADB0-5046-004F-DF2FFA532C5A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="$(OutDir)gen\protoc_out\gpu\command_buffer\service">
+      <UniqueIdentifier>{C9210780-0906-CC9E-BEC1-0AB6BFD1B977}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="command_buffer\service\disk_cache_proto.proto">
+      <Filter>command_buffer\service</Filter>
+    </None>
+    <None Include="gpu.gyp"/>
+    <None Include="..\tools\protoc_wrapper\protoc_wrapper.py">
+      <Filter>..\tools\protoc_wrapper</Filter>
+    </None>
+    <None Include="$(OutDir)\protoc.exe">
+      <Filter>$(OutDir)</Filter>
+    </None>
+    <None Include="$(OutDir)\pyproto\gpu\command_buffer\service\disk_cache_proto_pb2.py">
+      <Filter>$(OutDir)\pyproto\gpu\command_buffer\service</Filter>
+    </None>
+    <ClCompile Include="$(OutDir)gen\protoc_out\gpu\command_buffer\service\disk_cache_proto.pb.cc">
+      <Filter>$(OutDir)gen\protoc_out\gpu\command_buffer\service</Filter>
+    </ClCompile>
+    <ClInclude Include="$(OutDir)gen\protoc_out\gpu\command_buffer\service\disk_cache_proto.pb.h">
+      <Filter>$(OutDir)gen\protoc_out\gpu\command_buffer\service</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

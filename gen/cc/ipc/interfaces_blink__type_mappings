@@ -1,0 +1,177 @@
+{
+  "c++": {
+    "gfx.mojom.Size": {
+      "hashable": false, 
+      "typename": "::blink::WebSize", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/GeometryStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebSize.h"
+      ]
+    }, 
+    "cc.mojom.ReturnedResource": {
+      "hashable": false, 
+      "typename": "cc::ReturnedResource", 
+      "traits_headers": [
+        "cc/ipc/returned_resource_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/resources/returned_resource.h"
+      ]
+    }, 
+    "cc.mojom.LocalFrameId": {
+      "hashable": false, 
+      "typename": "cc::LocalFrameId", 
+      "traits_headers": [
+        "cc/ipc/local_frame_id_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/surfaces/local_frame_id.h"
+      ]
+    }, 
+    "mojo.common.mojom.String16": {
+      "hashable": false, 
+      "typename": "WTF::String", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/CommonCustomTypesStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "third_party/WebKit/Source/wtf/text/WTFString.h"
+      ]
+    }, 
+    "cc.mojom.CompositorFrame": {
+      "hashable": false, 
+      "typename": "cc::CompositorFrame", 
+      "traits_headers": [
+        "cc/ipc/compositor_frame_metadata_struct_traits.h", 
+        "cc/ipc/compositor_frame_struct_traits.h", 
+        "cc/ipc/filter_operation_struct_traits.h", 
+        "cc/ipc/filter_operations_struct_traits.h", 
+        "cc/ipc/render_pass_struct_traits.h", 
+        "cc/ipc/selection_struct_traits.h", 
+        "cc/ipc/shared_quad_state_struct_traits.h", 
+        "cc/ipc/transferable_resource_struct_traits.h", 
+        "cc/ipc/quads_struct_traits.h", 
+        "gpu/ipc/common/mailbox_holder_struct_traits.h", 
+        "gpu/ipc/common/mailbox_struct_traits.h", 
+        "gpu/ipc/common/sync_token_struct_traits.h", 
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/common_custom_types_struct_traits.h", 
+        "skia/public/interfaces/image_filter_struct_traits.h", 
+        "ui/gfx/mojo/selection_bound_struct_traits.h", 
+        "ui/gfx/mojo/transform_struct_traits.h", 
+        "ui/events/mojo/latency_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/output/compositor_frame.h"
+      ]
+    }, 
+    "cc.mojom.FrameSinkId": {
+      "hashable": false, 
+      "typename": "cc::FrameSinkId", 
+      "traits_headers": [
+        "cc/ipc/frame_sink_id_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/surfaces/frame_sink_id.h"
+      ]
+    }, 
+    "cc.mojom.SurfaceInfo": {
+      "hashable": false, 
+      "typename": "cc::SurfaceInfo", 
+      "traits_headers": [
+        "cc/ipc/surface_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/surfaces/surface_info.h"
+      ]
+    }, 
+    "cc.mojom.ReturnedResourceArray": {
+      "hashable": false, 
+      "typename": "cc::ReturnedResourceArray", 
+      "traits_headers": [
+        "cc/ipc/returned_resource_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/resources/returned_resource.h"
+      ]
+    }, 
+    "mojo.common.mojom.File": {
+      "hashable": false, 
+      "typename": "base::File", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/files/file.h"
+      ]
+    }, 
+    "cc.mojom.SurfaceId": {
+      "hashable": false, 
+      "typename": "cc::SurfaceId", 
+      "traits_headers": [
+        "cc/ipc/surface_id_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/surfaces/surface_id.h"
+      ]
+    }, 
+    "cc.mojom.SurfaceSequence": {
+      "hashable": false, 
+      "typename": "cc::SurfaceSequence", 
+      "traits_headers": [
+        "cc/ipc/surface_sequence_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/surfaces/surface_sequence.h"
+      ]
+    }, 
+    "cc.mojom.BeginFrameArgs": {
+      "hashable": false, 
+      "typename": "cc::BeginFrameArgs", 
+      "traits_headers": [
+        "cc/ipc/begin_frame_args_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "cc/output/begin_frame_args.h"
+      ]
+    }
+  }
+}

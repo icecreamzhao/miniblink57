@@ -1,0 +1,134 @@
+{
+  "c++": {
+    "blink.mojom.WebBluetoothDeviceId": {
+      "hashable": false, 
+      "typename": "WTF::String", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/BluetoothStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/Source/wtf/text/WTFString.h"
+      ]
+    }, 
+    "gfx.mojom.Size": {
+      "hashable": false, 
+      "typename": "::blink::WebSize", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/GeometryStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebSize.h"
+      ]
+    }, 
+    "mojo.common.mojom.String16": {
+      "hashable": false, 
+      "typename": "WTF::String", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/CommonCustomTypesStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "third_party/WebKit/Source/wtf/text/WTFString.h"
+      ]
+    }, 
+    "blink.mojom.ConsoleMessageLevel": {
+      "hashable": false, 
+      "typename": "::blink::WebConsoleMessage::Level", 
+      "traits_headers": [
+        "third_party/WebKit/public/web/ConsoleMessageStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/web/WebConsoleMessage.h"
+      ]
+    }, 
+    "url.mojom.Url": {
+      "hashable": false, 
+      "typename": "::blink::KURL", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/KURLStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/Source/platform/weborigin/KURL.h"
+      ]
+    }, 
+    "blink.mojom.WindowFeatures": {
+      "hashable": false, 
+      "typename": "::blink::WebWindowFeatures", 
+      "traits_headers": [
+        "third_party/WebKit/public/web/WindowFeaturesStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/web/WebWindowFeatures.h"
+      ]
+    }, 
+    "bluetooth.mojom.UUID": {
+      "hashable": false, 
+      "typename": "WTF::String", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/BluetoothStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/Source/wtf/text/WTFString.h"
+      ]
+    }, 
+    "blink.mojom.ReferrerPolicy": {
+      "hashable": false, 
+      "typename": "::blink::WebReferrerPolicy", 
+      "traits_headers": [
+        "third_party/WebKit/public/platform/ReferrerPolicyEnumTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebReferrerPolicy.h"
+      ]
+    }, 
+    "mojo.common.mojom.File": {
+      "hashable": false, 
+      "typename": "base::File", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/files/file.h"
+      ]
+    }, 
+    "url.mojom.Origin": {
+      "hashable": false, 
+      "typename": "RefPtr<::blink::SecurityOrigin>", 
+      "traits_headers": [
+        "third_party/WebKit/Source/platform/mojo/SecurityOriginStructTraits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/Source/platform/weborigin/SecurityOrigin.h"
+      ]
+    }
+  }
+}

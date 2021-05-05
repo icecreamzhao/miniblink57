@@ -1,0 +1,973 @@
+{
+  "c++": {
+    "mojo.common.mojom.Value": {
+      "hashable": false, 
+      "typename": "std::unique_ptr<base::Value>", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "service_manager.mojom.InterfaceSet": {
+      "hashable": false, 
+      "typename": "::service_manager::InterfaceSet", 
+      "traits_headers": [
+        "services/service_manager/public/cpp/interface_provider_spec_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "services/service_manager/public/cpp/interface_provider_spec.h"
+      ]
+    }, 
+    "media.mojom.DecodeStatus": {
+      "hashable": false, 
+      "typename": "media::DecodeStatus", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "mojo.common.mojom.String16": {
+      "hashable": false, 
+      "typename": "base::string16", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/strings/string16.h"
+      ]
+    }, 
+    "media.mojom.PowerLineFrequency": {
+      "hashable": false, 
+      "typename": "media::PowerLineFrequency", 
+      "traits_headers": [
+        "media/capture/ipc/capture_param_traits_macros.h", 
+        "media/capture/ipc/capture_param_traits.h", 
+        "media/capture/mojo/video_capture_types_typemap_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video_capture_types.h"
+      ]
+    }, 
+    "url.mojom.Url": {
+      "hashable": false, 
+      "typename": "GURL", 
+      "traits_headers": [
+        "url/mojo/url_gurl_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "url/gurl.h"
+      ]
+    }, 
+    "media.mojom.VideoPixelFormat": {
+      "hashable": false, 
+      "typename": "media::VideoPixelFormat", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "video_capture.mojom.I420CaptureFormat": {
+      "hashable": false, 
+      "typename": "video_capture::I420CaptureFormat", 
+      "traits_headers": [
+        "services/video_capture/public/interfaces/capture_settings_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video_capture_types.h", 
+        "services/video_capture/public/cpp/capture_settings.h"
+      ]
+    }, 
+    "media.mojom.ContentDecryptionModule.SessionType": {
+      "hashable": false, 
+      "typename": "media::CdmSessionType", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/cdm_key_information.h", 
+        "media/base/cdm_promise.h", 
+        "media/base/eme_constants.h", 
+        "media/base/content_decryption_module.h"
+      ]
+    }, 
+    "gfx.mojom.SizeF": {
+      "hashable": false, 
+      "typename": "gfx::SizeF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "media.mojom.VideoCaptureFormat": {
+      "hashable": false, 
+      "typename": "media::VideoCaptureFormat", 
+      "traits_headers": [
+        "media/capture/ipc/capture_param_traits_macros.h", 
+        "media/capture/ipc/capture_param_traits.h", 
+        "media/capture/mojo/video_capture_types_typemap_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video_capture_types.h"
+      ]
+    }, 
+    "mojo.common.mojom.DictionaryValue": {
+      "hashable": false, 
+      "typename": "std::unique_ptr<base::DictionaryValue>", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "media.mojom.ResolutionChangePolicy": {
+      "hashable": false, 
+      "typename": "media::ResolutionChangePolicy", 
+      "traits_headers": [
+        "media/capture/ipc/capture_param_traits_macros.h", 
+        "media/capture/ipc/capture_param_traits.h", 
+        "media/capture/mojo/video_capture_types_typemap_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video_capture_types.h"
+      ]
+    }, 
+    "service_manager.mojom.ServiceInfo": {
+      "hashable": false, 
+      "typename": "::service_manager::ServiceInfo", 
+      "traits_headers": [
+        "services/service_manager/public/cpp/service_info_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "services/service_manager/public/cpp/service_info.h"
+      ]
+    }, 
+    "media.mojom.CdmPromiseResult.Exception": {
+      "hashable": false, 
+      "typename": "media::CdmPromise::Exception", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/cdm_key_information.h", 
+        "media/base/cdm_promise.h", 
+        "media/base/eme_constants.h", 
+        "media/base/content_decryption_module.h"
+      ]
+    }, 
+    "mojo.common.mojom.TimeDelta": {
+      "hashable": false, 
+      "typename": "base::TimeDelta", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": true, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/time/time.h"
+      ]
+    }, 
+    "gfx.mojom.RectF": {
+      "hashable": false, 
+      "typename": "gfx::RectF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "service_manager.mojom.Identity": {
+      "hashable": false, 
+      "typename": "::service_manager::Identity", 
+      "traits_headers": [
+        "services/service_manager/public/cpp/identity_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "services/service_manager/public/cpp/identity.h"
+      ]
+    }, 
+    "mojo.common.mojom.ListValue": {
+      "hashable": false, 
+      "typename": "std::unique_ptr<base::ListValue>", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "video_capture.mojom.CaptureSettings": {
+      "hashable": false, 
+      "typename": "video_capture::CaptureSettings", 
+      "traits_headers": [
+        "services/video_capture/public/interfaces/capture_settings_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video_capture_types.h", 
+        "services/video_capture/public/cpp/capture_settings.h"
+      ]
+    }, 
+    "media.mojom.SubsampleEntry": {
+      "hashable": false, 
+      "typename": "media::SubsampleEntry", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "video_capture.mojom.DeviceDescriptor": {
+      "hashable": false, 
+      "typename": "media::VideoCaptureDeviceDescriptor", 
+      "traits_headers": [
+        "services/video_capture/public/interfaces/device_descriptor_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video/video_capture_device_descriptor.h"
+      ]
+    }, 
+    "service_manager.mojom.InterfaceProviderSpec": {
+      "hashable": false, 
+      "typename": "::service_manager::InterfaceProviderSpec", 
+      "traits_headers": [
+        "services/service_manager/public/cpp/interface_provider_spec_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "services/service_manager/public/cpp/interface_provider_spec.h"
+      ]
+    }, 
+    "media.mojom.VideoCodecProfile": {
+      "hashable": false, 
+      "typename": "media::VideoCodecProfile", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "gfx.mojom.Vector2d": {
+      "hashable": false, 
+      "typename": "gfx::Vector2d", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "media.mojom.EmeInitDataType": {
+      "hashable": false, 
+      "typename": "media::EmeInitDataType", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/cdm_key_information.h", 
+        "media/base/cdm_promise.h", 
+        "media/base/eme_constants.h", 
+        "media/base/content_decryption_module.h"
+      ]
+    }, 
+    "gfx.mojom.Point": {
+      "hashable": false, 
+      "typename": "gfx::Point", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gfx.mojom.Rect": {
+      "hashable": false, 
+      "typename": "gfx::Rect", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "mojo.common.mojom.UnguessableToken": {
+      "hashable": false, 
+      "typename": "base::UnguessableToken", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/unguessable_token.h"
+      ]
+    }, 
+    "gfx.mojom.InsetsF": {
+      "hashable": false, 
+      "typename": "gfx::InsetsF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "gfx.mojom.Insets": {
+      "hashable": false, 
+      "typename": "gfx::Insets", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "media.mojom.ChannelLayout": {
+      "hashable": false, 
+      "typename": "media::ChannelLayout", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "mojo.common.mojom.TimeTicks": {
+      "hashable": false, 
+      "typename": "base::TimeTicks", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": true, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/time/time.h"
+      ]
+    }, 
+    "mojo.common.mojom.File": {
+      "hashable": false, 
+      "typename": "base::File", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": true, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "base/files/file.h"
+      ]
+    }, 
+    "mojo.common.mojom.LegacyListValue": {
+      "hashable": false, 
+      "typename": "base::ListValue", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/values_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/values.h"
+      ]
+    }, 
+    "media.mojom.CdmKeyInformation.KeyStatus": {
+      "hashable": false, 
+      "typename": "media::CdmKeyInformation::KeyStatus", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/cdm_key_information.h", 
+        "media/base/cdm_promise.h", 
+        "media/base/eme_constants.h", 
+        "media/base/content_decryption_module.h"
+      ]
+    }, 
+    "media.mojom.Decryptor.Status": {
+      "hashable": false, 
+      "typename": "media::Decryptor::Status", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/decryptor.h"
+      ]
+    }, 
+    "gfx.mojom.Size": {
+      "hashable": false, 
+      "typename": "gfx::Size", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "media.mojom.DemuxerStream.Status": {
+      "hashable": false, 
+      "typename": "media::DemuxerStream::Status", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/demuxer_stream.h"
+      ]
+    }, 
+    "media.mojom.AudioParameters": {
+      "hashable": false, 
+      "typename": "media::AudioParameters", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_parameters.h"
+      ]
+    }, 
+    "mojo.common.mojom.Version": {
+      "hashable": false, 
+      "typename": "base::Version", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/version.h"
+      ]
+    }, 
+    "media.mojom.VideoCaptureParams": {
+      "hashable": false, 
+      "typename": "media::VideoCaptureParams", 
+      "traits_headers": [
+        "media/capture/ipc/capture_param_traits_macros.h", 
+        "media/capture/ipc/capture_param_traits.h", 
+        "media/capture/mojo/video_capture_types_typemap_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video_capture_types.h"
+      ]
+    }, 
+    "media.mojom.ColorSpace": {
+      "hashable": false, 
+      "typename": "media::ColorSpace", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "media.mojom.DemuxerStream.Type": {
+      "hashable": false, 
+      "typename": "media::DemuxerStream::Type", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/demuxer_stream.h"
+      ]
+    }, 
+    "media.mojom.BufferingState": {
+      "hashable": false, 
+      "typename": "media::BufferingState", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "gfx.mojom.PointF": {
+      "hashable": false, 
+      "typename": "gfx::PointF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "service_manager.mojom.CapabilitySet": {
+      "hashable": false, 
+      "typename": "::service_manager::CapabilitySet", 
+      "traits_headers": [
+        "services/service_manager/public/cpp/interface_provider_spec_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "services/service_manager/public/cpp/interface_provider_spec.h"
+      ]
+    }, 
+    "media.mojom.EncryptionScheme.CipherMode": {
+      "hashable": false, 
+      "typename": "media::EncryptionScheme::CipherMode", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "media.mojom.PipelineStatistics": {
+      "hashable": false, 
+      "typename": "media::PipelineStatistics", 
+      "traits_headers": [
+        "media/mojo/interfaces/pipeline_statistics_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/pipeline_status.h"
+      ]
+    }, 
+    "media.mojom.AudioCodec": {
+      "hashable": false, 
+      "typename": "media::AudioCodec", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "mojo.common.mojom.TextDirection": {
+      "hashable": false, 
+      "typename": "base::i18n::TextDirection", 
+      "traits_headers": [
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/i18n/rtl.h"
+      ]
+    }, 
+    "media.mojom.VideoCodec": {
+      "hashable": false, 
+      "typename": "media::VideoCodec", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "gfx.mojom.Vector2dF": {
+      "hashable": false, 
+      "typename": "gfx::Vector2dF", 
+      "traits_headers": [
+        "ui/gfx/geometry/mojo/geometry_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/gfx/geometry/point.h", 
+        "ui/gfx/geometry/point_f.h", 
+        "ui/gfx/geometry/size.h", 
+        "ui/gfx/geometry/rect.h", 
+        "ui/gfx/geometry/rect_f.h", 
+        "ui/gfx/geometry/safe_integer_conversions.h", 
+        "ui/gfx/geometry/insets.h", 
+        "ui/gfx/geometry/vector2d.h", 
+        "ui/gfx/geometry/vector2d_f.h"
+      ]
+    }, 
+    "mojo.common.mojom.Time": {
+      "hashable": false, 
+      "typename": "base::Time", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h", 
+        "mojo/common/common_custom_types_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": true, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/time/time.h"
+      ]
+    }, 
+    "media.mojom.VideoPixelStorage": {
+      "hashable": false, 
+      "typename": "media::VideoPixelStorage", 
+      "traits_headers": [
+        "media/capture/ipc/capture_param_traits_macros.h", 
+        "media/capture/ipc/capture_param_traits.h", 
+        "media/capture/mojo/video_capture_types_typemap_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/capture/video_capture_types.h"
+      ]
+    }, 
+    "media.mojom.Decryptor.StreamType": {
+      "hashable": false, 
+      "typename": "media::Decryptor::StreamType", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/decryptor.h"
+      ]
+    }, 
+    "media.mojom.SampleFormat": {
+      "hashable": false, 
+      "typename": "media::SampleFormat", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/audio_codecs.h", 
+        "media/base/buffering_state.h", 
+        "media/base/channel_layout.h", 
+        "media/base/decode_status.h", 
+        "media/base/encryption_scheme.h", 
+        "media/base/sample_format.h", 
+        "media/base/subsample_entry.h", 
+        "media/base/video_codecs.h", 
+        "media/base/video_types.h"
+      ]
+    }, 
+    "media.mojom.ContentDecryptionModuleClient.MessageType": {
+      "hashable": false, 
+      "typename": "media::ContentDecryptionModule::MessageType", 
+      "traits_headers": [
+        "media/base/ipc/media_param_traits_macros.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "media/base/cdm_key_information.h", 
+        "media/base/cdm_promise.h", 
+        "media/base/eme_constants.h", 
+        "media/base/content_decryption_module.h"
+      ]
+    }, 
+    "mojo.common.mojom.FilePath": {
+      "hashable": false, 
+      "typename": "base::FilePath", 
+      "traits_headers": [
+        "ipc/ipc_message_utils.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "base/files/file_path.h"
+      ]
+    }
+  }
+}

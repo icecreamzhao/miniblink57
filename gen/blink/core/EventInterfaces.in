@@ -1,0 +1,36 @@
+namespace="Event"
+export=CORE_EXPORT
+
+core/css/FontFaceSetLoadEvent 
+core/css/MediaQueryListEvent 
+core/events/AnimationEvent 
+core/events/AnimationPlaybackEvent RuntimeEnabled=WebAnimationsAPIEnabled
+core/events/ApplicationCacheErrorEvent 
+core/events/BeforeUnloadEvent 
+core/events/ClipboardEvent 
+core/events/CompositionEvent 
+core/events/CustomEvent 
+core/events/DragEvent 
+core/events/ErrorEvent 
+core/events/Event 
+core/events/FocusEvent 
+core/events/HashChangeEvent 
+core/events/InputEvent RuntimeEnabled=InputEventEnabled
+core/events/KeyboardEvent 
+core/events/MessageEvent 
+core/events/MouseEvent 
+core/events/MutationEvent 
+core/events/PageTransitionEvent 
+core/events/PointerEvent RuntimeEnabled=PointerEventEnabled
+core/events/PopStateEvent 
+core/events/ProgressEvent 
+core/events/PromiseRejectionEvent 
+core/events/RelatedEvent RuntimeEnabled=ContextMenuEnabled
+core/events/ResourceProgressEvent 
+core/events/SecurityPolicyViolationEvent 
+core/events/TextEvent 
+core/events/TouchEvent 
+core/events/TransitionEvent 
+core/events/UIEvent 
+core/events/WheelEvent 
+core/html/track/TrackEvent 

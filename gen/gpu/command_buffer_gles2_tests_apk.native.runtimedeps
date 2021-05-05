@@ -1,0 +1,4 @@
+./lib_command_buffer_gles2_tests__library.so
+./libcommand_buffer_gles2.so
+gen/ipc/ipc.mojom.js
+../../testing/test_env.py

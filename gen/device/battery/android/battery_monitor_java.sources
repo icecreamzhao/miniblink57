@@ -1,0 +1,3 @@
+../../device/battery/android/java/src/org/chromium/device/battery/BatteryStatusManager.java
+../../device/battery/android/java/src/org/chromium/device/battery/BatteryMonitorImpl.java
+../../device/battery/android/java/src/org/chromium/device/battery/BatteryMonitorFactory.java

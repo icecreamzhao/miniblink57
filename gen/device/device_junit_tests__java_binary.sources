@@ -1,0 +1,3 @@
+../../device/gamepad/android/junit/src/org/chromium/device/gamepad/GamepadMappingsTest.java
+../../device/generic_sensor/android/junit/src/org/chromium/device/sensors/PlatformSensorAndProviderTest.java
+../../device/nfc/android/junit/src/org/chromium/device/nfc/NFCTest.java

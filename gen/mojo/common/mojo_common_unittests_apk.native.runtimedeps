@@ -1,0 +1,13 @@
+./lib_mojo_common_unittests__library.so
+gen/mojo/common/file.mojom.js
+gen/mojo/common/file_path.mojom.js
+gen/mojo/common/string16.mojom.js
+gen/mojo/common/text_direction.mojom.js
+gen/mojo/common/time.mojom.js
+gen/mojo/common/unguessable_token.mojom.js
+gen/mojo/common/values.mojom.js
+gen/mojo/common/version.mojom.js
+gen/ipc/ipc.mojom.js
+gen/mojo/common/test_common_custom_types.mojom.js
+gen/mojo/common/traits_test_service.mojom.js
+../../testing/test_env.py

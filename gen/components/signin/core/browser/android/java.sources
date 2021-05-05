@@ -1,0 +1,6 @@
+../../components/signin/core/browser/android/java/src/org/chromium/components/signin/AccountManagerDelegate.java
+../../components/signin/core/browser/android/java/src/org/chromium/components/signin/AccountManagerHelper.java
+../../components/signin/core/browser/android/java/src/org/chromium/components/signin/AuthException.java
+../../components/signin/core/browser/android/java/src/org/chromium/components/signin/ChildAccountInfoFetcher.java
+../../components/signin/core/browser/android/java/src/org/chromium/components/signin/ChromeSigninController.java
+../../components/signin/core/browser/android/java/src/org/chromium/components/signin/SystemAccountManagerDelegate.java

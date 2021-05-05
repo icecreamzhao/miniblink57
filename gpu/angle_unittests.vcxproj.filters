@@ -1,0 +1,1308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\common">
+      <UniqueIdentifier>{2F5FD094-EF52-77F7-7AA8-4327A01BF747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\common">
+      <UniqueIdentifier>{2F5FD094-EF52-77F7-7AA8-4327A01BF747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\common">
+      <UniqueIdentifier>{2F5FD094-EF52-77F7-7AA8-4327A01BF747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\common">
+      <UniqueIdentifier>{2F5FD094-EF52-77F7-7AA8-4327A01BF747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\common">
+      <UniqueIdentifier>{2F5FD094-EF52-77F7-7AA8-4327A01BF747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\common">
+      <UniqueIdentifier>{2F5FD094-EF52-77F7-7AA8-4327A01BF747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE\renderer">
+      <UniqueIdentifier>{AC4EF684-2900-10EA-3D11-A6DF0901358C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE\renderer">
+      <UniqueIdentifier>{AC4EF684-2900-10EA-3D11-A6DF0901358C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE\renderer">
+      <UniqueIdentifier>{AC4EF684-2900-10EA-3D11-A6DF0901358C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE\renderer">
+      <UniqueIdentifier>{AC4EF684-2900-10EA-3D11-A6DF0901358C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE\renderer">
+      <UniqueIdentifier>{AC4EF684-2900-10EA-3D11-A6DF0901358C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\preprocessor_tests">
+      <UniqueIdentifier>{632C9332-A0B2-BB90-4896-0AA600FCDB92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\test_utils">
+      <UniqueIdentifier>{7A6B8B00-0BF3-CCF5-E4E0-34157314ABAC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\test_utils">
+      <UniqueIdentifier>{7A6B8B00-0BF3-CCF5-E4E0-34157314ABAC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE">
+      <UniqueIdentifier>{1CCF162D-4AC4-ACF2-4B07-B45A2A3C124D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE\renderer">
+      <UniqueIdentifier>{AC4EF684-2900-10EA-3D11-A6DF0901358C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\libANGLE\renderer\d3d">
+      <UniqueIdentifier>{3AC19AE3-A12C-4021-D645-4CEA5BC956DB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party">
+      <UniqueIdentifier>{D6C6CEA7-AAD0-03AD-2394-AC6FCBF8A498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src">
+      <UniqueIdentifier>{8CDEE807-BC53-E450-C8B8-4DEBB66742D4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests">
+      <UniqueIdentifier>{71685B5B-5DB1-D3F0-6DF4-FE19B5454C87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\third_party\angle\src\tests\compiler_tests">
+      <UniqueIdentifier>{47629FA2-A2F0-F652-6220-97FEBB2815C2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="angle_unittest_main.cc"/>
+    <ClCompile Include="..\third_party\angle\src\common\BitSetIterator_unittest.cpp">
+      <Filter>..\third_party\angle\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\common\Optional_unittest.cpp">
+      <Filter>..\third_party\angle\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\common\mathutil_unittest.cpp">
+      <Filter>..\third_party\angle\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\common\matrix_utils_unittest.cpp">
+      <Filter>..\third_party\angle\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\common\string_utils_unittest.cpp">
+      <Filter>..\third_party\angle\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\common\utilities_unittest.cpp">
+      <Filter>..\third_party\angle\src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\Config_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\Fence_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\HandleAllocator_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\Image_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\ImageIndexIterator_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\Program_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\ResourceManager_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\Surface_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\TransformFeedback_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE</Filter>
+    </ClCompile>
+    <ClInclude Include="..\third_party\angle\src\libANGLE\renderer\BufferImpl_mock.h">
+      <Filter>..\third_party\angle\src\libANGLE\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\angle\src\libANGLE\renderer\RenderbufferImpl_mock.h">
+      <Filter>..\third_party\angle\src\libANGLE\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\angle\src\libANGLE\renderer\ImageImpl_mock.h">
+      <Filter>..\third_party\angle\src\libANGLE\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\angle\src\libANGLE\renderer\TextureImpl_mock.h">
+      <Filter>..\third_party\angle\src\libANGLE\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\angle\src\libANGLE\renderer\TransformFeedbackImpl_mock.h">
+      <Filter>..\third_party\angle\src\libANGLE\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\angle\src\tests\angle_unittests_utils.h">
+      <Filter>..\third_party\angle\src\tests</Filter>
+    </ClInclude>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\API_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\BuiltInFunctionEmulator_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\CollectVariables_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\ConstantFolding_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\DebugShaderPrecision_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\ExpressionLimit_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\EXT_blend_func_extended_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\FragDepth_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\IntermNode_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\MalformedShader_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\NV_draw_buffers_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\Pack_Unpack_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\PruneUnusedFunctions_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\RecordConstantPrecision_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\RemovePow_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\ShaderExtension_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\ShaderVariable_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\ShCompile_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\TypeTracking_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\VariablePacker_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\char_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\comment_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\define_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\error_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\extension_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\identifier_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\if_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\input_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\location_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClInclude Include="..\third_party\angle\src\tests\preprocessor_tests\MockDiagnostics.h">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\third_party\angle\src\tests\preprocessor_tests\MockDirectiveHandler.h">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClInclude>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\number_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\operator_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\pragma_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\PreprocessorTest.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClInclude Include="..\third_party\angle\src\tests\preprocessor_tests\PreprocessorTest.h">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClInclude>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\space_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\token_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\preprocessor_tests\version_test.cpp">
+      <Filter>..\third_party\angle\src\tests\preprocessor_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\test_utils\compiler_test.cpp">
+      <Filter>..\third_party\angle\src\tests\test_utils</Filter>
+    </ClCompile>
+    <ClInclude Include="..\third_party\angle\src\tests\test_utils\compiler_test.h">
+      <Filter>..\third_party\angle\src\tests\test_utils</Filter>
+    </ClInclude>
+    <ClCompile Include="..\third_party\angle\src\libANGLE\renderer\d3d\DynamicHLSL_unittest.cpp">
+      <Filter>..\third_party\angle\src\libANGLE\renderer\d3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\angle\src\tests\compiler_tests\UnrollFlatten_test.cpp">
+      <Filter>..\third_party\angle\src\tests\compiler_tests</Filter>
+    </ClCompile>
+    <None Include="gpu.gyp"/>
+  </ItemGroup>
+</Project>
