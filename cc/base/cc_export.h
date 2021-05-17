@@ -26,4 +26,14 @@
 #define CC_EXPORT
 #endif
 
+#include <xlocnum>
+#include <xiosbase>
+#include <iterator>
+#include <bitset>
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
+#include <set>
+#include <algorithm>
+
 #endif // CC_BASE_CC_EXPORT_H_

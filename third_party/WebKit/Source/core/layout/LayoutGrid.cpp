@@ -1892,9 +1892,7 @@ void LayoutGrid::distributeSpaceToTracks(
                 : std::min(availableLogicalSpaceShare,
                     track.growthLimit() - trackBreadth);
             clampGrowthShareIfNeeded(phase, track, growthShare);
-            DCHECK_GE(growthShare, 0) << "We must never shrink any grid track or "
-                                         "else we can't guarantee we abide by our "
-                                         "min-sizing function.";
+            DCHECK_GE(growthShare, 0);// << "We must never shrink any grid track or else we can't guarantee we abide by our min-sizing function.";
             track.growSizeDuringDistribution(growthShare);
             availableLogicalSpace -= growthShare;
         }
@@ -1914,9 +1912,7 @@ void LayoutGrid::distributeSpaceToTracks(
             GridTrack* track = growBeyondGrowthLimitsTracks->at(i);
             LayoutUnit growthShare = availableLogicalSpace / (tracksGrowingAboveMaxBreadthSize - i);
             clampGrowthShareIfNeeded(phase, *track, growthShare);
-            DCHECK_GE(growthShare, 0) << "We must never shrink any grid track or "
-                                         "else we can't guarantee we abide by our "
-                                         "min-sizing function.";
+            DCHECK_GE(growthShare, 0); // << "We must never shrink any grid track or else we can't guarantee we abide by our min-sizing function.";
             track->growSizeDuringDistribution(growthShare);
             availableLogicalSpace -= growthShare;
         }

@@ -62,8 +62,7 @@ int64_t FileTimeToMicroseconds(const FILETIME& ft)
 
 void MicrosecondsToFileTime(int64_t us, FILETIME* ft)
 {
-    DCHECK_GE(us, 0LL) << "Time is less than 0, negative values are not "
-                          "representable in FILETIME";
+    DCHECK_GE(us, 0LL); // << "Time is less than 0, negative values are not representable in FILETIME";
 
     // Multiply by 10 to convert microseconds to 100-nanoseconds. Bit_cast will
     // handle alignment problems. This only works on little-endian machines.

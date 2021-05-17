@@ -68,57 +68,58 @@ namespace debug {
     void GDIBitmapAllocFailure(BITMAPINFOHEADER* header, HANDLE shared_section)
     {
         // Make sure parameters are saved in the minidump.
-        DWORD last_error = GetLastError();
-
-        LONG width = header->biWidth;
-        LONG heigth = header->biHeight;
-
-        base::debug::Alias(&last_error);
-        base::debug::Alias(&width);
-        base::debug::Alias(&heigth);
-        base::debug::Alias(&shared_section);
-
-        DWORD num_user_handles = GetGuiResources(GetCurrentProcess(), GR_USEROBJECTS);
-
-        DWORD num_gdi_handles = GetGuiResources(GetCurrentProcess(), GR_GDIOBJECTS);
-        if (num_gdi_handles == 0) {
-            DWORD get_gui_resources_error = GetLastError();
-            base::debug::Alias(&get_gui_resources_error);
-            CHECK(false);
-        }
-
-        base::debug::Alias(&num_gdi_handles);
-        base::debug::Alias(&num_user_handles);
-
-        const DWORD kLotsOfHandles = 9990;
-        CHECK_LE(num_gdi_handles, kLotsOfHandles);
-
-        PROCESS_MEMORY_COUNTERS_EX pmc;
-        pmc.cb = sizeof(pmc);
-        CHECK(GetProcessMemoryInfo(GetCurrentProcess(),
-            reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&pmc),
-            sizeof(pmc)));
-        const size_t kLotsOfMemory = 1500 * 1024 * 1024; // 1.5GB
-        CHECK_LE(pmc.PagefileUsage, kLotsOfMemory);
-        CHECK_LE(pmc.PrivateUsage, kLotsOfMemory);
-
-        void* small_data = NULL;
-        base::debug::Alias(&small_data);
-
-        if (std::abs(heigth) * width > 100) {
-            // Huh, that's weird.  We don't have crazy handle count, we don't have
-            // ridiculous memory usage. Try to allocate a small bitmap and see if that
-            // fails too.
-            header->biWidth = 5;
-            header->biHeight = -5;
-            HBITMAP small_bitmap = CreateDIBSection(
-                NULL, reinterpret_cast<BITMAPINFO*>(&header),
-                0, &small_data, shared_section, 0);
-            CHECK(small_bitmap != NULL);
-            DeleteObject(small_bitmap);
-        }
-        // Maybe the child processes are the ones leaking GDI or USER resouces.
-        CollectChildGDIUsageAndDie(GetCurrentProcessId());
+//         DWORD last_error = GetLastError();
+// 
+//         LONG width = header->biWidth;
+//         LONG heigth = header->biHeight;
+// 
+//         base::debug::Alias(&last_error);
+//         base::debug::Alias(&width);
+//         base::debug::Alias(&heigth);
+//         base::debug::Alias(&shared_section);
+// 
+//         DWORD num_user_handles = GetGuiResources(GetCurrentProcess(), GR_USEROBJECTS);
+// 
+//         DWORD num_gdi_handles = GetGuiResources(GetCurrentProcess(), GR_GDIOBJECTS);
+//         if (num_gdi_handles == 0) {
+//             DWORD get_gui_resources_error = GetLastError();
+//             base::debug::Alias(&get_gui_resources_error);
+//             CHECK(false);
+//         }
+// 
+//         base::debug::Alias(&num_gdi_handles);
+//         base::debug::Alias(&num_user_handles);
+// 
+//         const DWORD kLotsOfHandles = 9990;
+//         CHECK_LE(num_gdi_handles, kLotsOfHandles);
+// 
+//         PROCESS_MEMORY_COUNTERS_EX pmc;
+//         pmc.cb = sizeof(pmc);
+//         CHECK(GetProcessMemoryInfo(GetCurrentProcess(),
+//             reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&pmc),
+//             sizeof(pmc)));
+//         const size_t kLotsOfMemory = 1500 * 1024 * 1024; // 1.5GB
+//         CHECK_LE(pmc.PagefileUsage, kLotsOfMemory);
+//         CHECK_LE(pmc.PrivateUsage, kLotsOfMemory);
+// 
+//         void* small_data = NULL;
+//         base::debug::Alias(&small_data);
+// 
+//         if (std::abs(heigth) * width > 100) {
+//             // Huh, that's weird.  We don't have crazy handle count, we don't have
+//             // ridiculous memory usage. Try to allocate a small bitmap and see if that
+//             // fails too.
+//             header->biWidth = 5;
+//             header->biHeight = -5;
+//             HBITMAP small_bitmap = CreateDIBSection(
+//                 NULL, reinterpret_cast<BITMAPINFO*>(&header),
+//                 0, &small_data, shared_section, 0);
+//             CHECK(small_bitmap != NULL);
+//             DeleteObject(small_bitmap);
+//         }
+//         // Maybe the child processes are the ones leaking GDI or USER resouces.
+//         CollectChildGDIUsageAndDie(GetCurrentProcessId());
+        DebugBreak();
     }
 
 } // namespace debug

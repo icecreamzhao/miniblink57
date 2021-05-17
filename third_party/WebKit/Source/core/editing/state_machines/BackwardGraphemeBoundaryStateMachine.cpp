@@ -49,8 +49,8 @@ std::ostream& operator<<(
 #undef V
     };
     const auto& it = std::begin(texts) + static_cast<size_t>(state);
-    DCHECK_GE(it, std::begin(texts)) << "Unknown state value";
-    DCHECK_LT(it, std::end(texts)) << "Unknown state value";
+    DCHECK_GE(it, std::begin(texts)); // << "Unknown state value";
+    DCHECK_LT(it, std::end(texts)); // << "Unknown state value";
     return os << *it;
 }
 
@@ -216,9 +216,9 @@ int BackwardGraphemeBoundaryStateMachine::finalizeAndGetBoundaryOffset()
 TextSegmentationMachineState
 BackwardGraphemeBoundaryStateMachine::moveToNextState(InternalState nextState)
 {
-    DCHECK_NE(nextState, InternalState::Finished) << "Use finish() instead";
-    DCHECK_NE(nextState, InternalState::Start) << "Unable to move to Start";
-    DCHECK_NE(m_internalState, nextState) << "Use staySameState() instead.";
+    DCHECK_NE(nextState, InternalState::Finished);// << "Use finish() instead";
+    DCHECK_NE(nextState, InternalState::Start); // << "Unable to move to Start";
+    DCHECK_NE(m_internalState, nextState); // << "Use staySameState() instead.";
     m_internalState = nextState;
     return TextSegmentationMachineState::NeedMoreCodeUnit;
 }
@@ -226,7 +226,7 @@ BackwardGraphemeBoundaryStateMachine::moveToNextState(InternalState nextState)
 TextSegmentationMachineState
 BackwardGraphemeBoundaryStateMachine::staySameState()
 {
-    DCHECK_EQ(m_internalState, InternalState::Search) << "Only Search can stay.";
+    DCHECK_EQ(m_internalState, InternalState::Search); // << "Only Search can stay.";
     return TextSegmentationMachineState::NeedMoreCodeUnit;
 }
 

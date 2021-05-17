@@ -352,7 +352,7 @@ void MessagePumpForUI::WaitForWork()
             wait_flags = 0;
         }
 
-        DCHECK_NE(WAIT_FAILED, result) << GetLastError();
+        DCHECK_NE(WAIT_FAILED, result); // << GetLastError();
     }
 }
 
@@ -637,7 +637,7 @@ void MessagePumpForGpu::WaitForWork()
 
         HANDLE handle = event_.Get();
         DWORD result = g_msg_wait_for_multiple_objects_ex(1, &handle, delay, QS_ALLINPUT, 0);
-        DCHECK_NE(WAIT_FAILED, result) << GetLastError();
+        DCHECK_NE(WAIT_FAILED, result); // << GetLastError();
         if (result != WAIT_TIMEOUT) {
             // Either work or message available.
             return;
@@ -780,7 +780,7 @@ void MessagePumpForIO::WaitForWork()
 {
     // We do not support nested IO message loops. This is to avoid messy
     // recursion problems.
-    DCHECK_EQ(1, state_->run_depth) << "Cannot nest an IO message loop!";
+    DCHECK_EQ(1, state_->run_depth); // << "Cannot nest an IO message loop!";
 
     int timeout = GetCurrentDelay();
     if (timeout < 0) // Negative value means no timers waiting.

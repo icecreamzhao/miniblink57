@@ -40,7 +40,6 @@
 #include "third_party/skia/include/ports/SkTypeface_win.h"
 
 #include "content/web_impl_win/BlinkPlatformImpl.h"
-//#include "content/web_impl_win/WebThreadImpl.h"
 #include "content/browser/RenderViewHost.h"
 
 #include "gen/blink/platform/RuntimeEnabledFeatures.h"

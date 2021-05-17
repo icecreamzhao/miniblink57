@@ -175,7 +175,7 @@ namespace trace_event {
                 if (arg_is_copy[i])
                     CopyTraceEventParameter(&ptr, &arg_values_[i].as_string, end);
             }
-            DCHECK_EQ(end, ptr) << "Overrun by " << ptr - end;
+            DCHECK_EQ(end, ptr); // << "Overrun by " << ptr - end;
         }
     }
 
@@ -275,7 +275,7 @@ namespace trace_event {
             EscapeJSONString(value.as_string ? value.as_string : "NULL", true, out);
             break;
         default:
-            NOTREACHED() << "Don't know how to print this value";
+            NOTREACHED(); // << "Don't know how to print this value";
             break;
         }
     }

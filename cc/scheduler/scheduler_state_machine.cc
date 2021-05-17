@@ -1056,8 +1056,7 @@ void SchedulerStateMachine::SetNeedsOneBeginImplFrame()
 
 void SchedulerStateMachine::NotifyReadyToCommit()
 {
-    DCHECK_EQ(begin_main_frame_state_, BEGIN_MAIN_FRAME_STATE_STARTED)
-        << AsValue()->ToString();
+    DCHECK_EQ(begin_main_frame_state_, BEGIN_MAIN_FRAME_STATE_STARTED); // << AsValue()->ToString();
     begin_main_frame_state_ = BEGIN_MAIN_FRAME_STATE_READY_TO_COMMIT;
     // In commit_to_active_tree mode, commit should happen right after BeginFrame,
     // meaning when this function is called, next action should be commit.

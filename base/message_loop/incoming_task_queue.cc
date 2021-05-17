@@ -43,7 +43,7 @@ namespace internal {
             if (delay > TimeDelta())
                 delayed_run_time = TimeTicks::Now() + delay;
             else
-                DCHECK_EQ(delay.InMilliseconds(), 0) << "delay should not be negative";
+                DCHECK_EQ(delay.InMilliseconds(), 0); // << "delay should not be negative";
             return delayed_run_time;
         }
 

@@ -280,8 +280,9 @@ void ThreadHeap::detach(ThreadState* thread)
         m_threads.remove(thread);
         isLastThread = m_threads.isEmpty();
     }
-    if (thread->isMainThread())
+    if (thread->isMainThread()) {
         DCHECK_EQ(heapStats().allocatedSpace(), 0u);
+    }
     if (isLastThread)
         delete this;
 }

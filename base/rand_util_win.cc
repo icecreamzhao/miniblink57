@@ -20,6 +20,9 @@
 
 #include "base/logging.h"
 
+#undef max
+#undef min
+
 namespace base {
 
 // NOTE: This function must be cryptographically secure. http://crbug.com/140076

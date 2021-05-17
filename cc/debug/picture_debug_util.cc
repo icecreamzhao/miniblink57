@@ -9,6 +9,7 @@
 #include <limits>
 #include <memory>
 #include <vector>
+#include <windows.h>
 
 #include "base/base64.h"
 #include "base/logging.h"

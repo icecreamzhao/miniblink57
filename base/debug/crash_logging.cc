@@ -163,8 +163,7 @@ namespace debug {
             total_keys += NumChunksForLength(keys[i].max_length);
             DCHECK_LT(keys[i].max_length, kLargestValueAllowed);
         }
-        DCHECK_EQ(count, g_crash_keys_->size())
-            << "Duplicate crash keys were registered";
+        DCHECK_EQ(count, g_crash_keys_->size()); // << "Duplicate crash keys were registered";
 
         return total_keys;
     }

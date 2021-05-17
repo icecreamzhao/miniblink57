@@ -50,10 +50,8 @@ class SynchronousCompositorFrameSinkClient {
 public:
     virtual void DidActivatePendingTree() = 0;
     virtual void Invalidate() = 0;
-    virtual void SubmitCompositorFrame(uint32_t compositor_frame_sink_id,
-        cc::CompositorFrame frame)
-        = 0;
-#if ENABLE_TENCENT(REPORT_SCREEN_STATUS)
+    virtual void SubmitCompositorFrame(uint32_t compositor_frame_sink_id, cc::CompositorFrame frame) = 0;
+#if 0 // ENABLE_TENCENT(REPORT_SCREEN_STATUS)
     virtual void NotifyScreenStatus(int status) = 0;
 #endif
 protected:
@@ -103,7 +101,7 @@ public:
     // SurfaceFactoryClient implementation.
     void ReturnResources(const cc::ReturnedResourceArray& resources) override;
     void SetBeginFrameSource(cc::BeginFrameSource* begin_frame_source) override;
-#if ENABLE_TENCENT(REPORT_SCREEN_STATUS)
+#if 0 // ENABLE_TENCENT(REPORT_SCREEN_STATUS)
     virtual void NotifyScreenStatus(int status) override;
 #endif
 

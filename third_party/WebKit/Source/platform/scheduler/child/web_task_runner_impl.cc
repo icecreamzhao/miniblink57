@@ -24,8 +24,7 @@ namespace scheduler {
         const base::Closure& task,
         double delayMs)
     {
-        DCHECK_GE(delayMs, 0.0) << location.function_name() << " "
-                                << location.file_name();
+        DCHECK_GE(delayMs, 0.0); // << location.function_name() << " " << location.file_name();
         task_queue_->PostDelayedTask(location, task,
             base::TimeDelta::FromMillisecondsD(delayMs));
     }

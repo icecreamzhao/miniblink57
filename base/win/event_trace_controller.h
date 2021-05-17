@@ -29,6 +29,33 @@
 #include "base/base_export.h"
 #include "base/macros.h"
 
+typedef ULONG64 TRACEHANDLE, *PTRACEHANDLE;
+
+typedef struct _EVENT_TRACE_PROPERTIES {
+    WNODE_HEADER Wnode;
+    //
+    // data provided by caller
+    ULONG BufferSize;                   // buffer size for logging (kbytes)
+    ULONG MinimumBuffers;               // minimum to preallocate
+    ULONG MaximumBuffers;               // maximum buffers allowed
+    ULONG MaximumFileSize;              // maximum logfile size (in MBytes)
+    ULONG LogFileMode;                  // sequential, circular
+    ULONG FlushTimer;                   // buffer flush timer, in seconds
+    ULONG EnableFlags;                  // trace enable flags
+    LONG  AgeLimit;                     // unused
+
+                                        // data returned to caller
+    ULONG NumberOfBuffers;              // no of buffers in use
+    ULONG FreeBuffers;                  // no of buffers free
+    ULONG EventsLost;                   // event records lost
+    ULONG BuffersWritten;               // no of buffers written to file
+    ULONG LogBuffersLost;               // no of logfile write failures
+    ULONG RealTimeBuffersLost;          // no of rt delivery failures
+    HANDLE LoggerThreadId;              // thread id of Logger
+    ULONG LogFileNameOffset;            // Offset to LogFileName
+    ULONG LoggerNameOffset;             // Offset to LoggerName
+} EVENT_TRACE_PROPERTIES, * PEVENT_TRACE_PROPERTIES;
+
 namespace base {
 namespace win {
 

@@ -606,7 +606,7 @@ std::string* MakeCheckOpString(const t1& v1, const t2& v2, const char* names)
     //   ss << ")";
     //   std::string* msg = new std::string(ss.str());
     //   return msg;
-    DebugBreak();
+    *(int*)1 = 1;
     return nullptr;
 }
 
@@ -808,12 +808,13 @@ const LogSeverity LOG_DCHECK = LOG_INFO;
 // Note that the contract of DCHECK_EQ, etc is that arguments are only evaluated
 // once. Even though |val1| and |val2| appear twice in this version of the macro
 // expansion, this is OK, since the expression is never actually evaluated.
-#define DCHECK_OP(name, op, val1, val2)                               \
-    EAT_STREAM_PARAMETERS << (::logging::MakeCheckOpValueString(      \
-                                  ::logging::g_swallow_stream, val1), \
-        ::logging::MakeCheckOpValueString(                            \
-            ::logging::g_swallow_stream, val2),                       \
-        (val1)op(val2))
+// #define DCHECK_OP(name, op, val1, val2)                               \
+//     EAT_STREAM_PARAMETERS << (::logging::MakeCheckOpValueString(      \
+//                                   ::logging::g_swallow_stream, val1), \
+//         ::logging::MakeCheckOpValueString(                            \
+//             ::logging::g_swallow_stream, val2),                       \
+//         (val1)op(val2))
+#define DCHECK_OP(name, op, val1, val2) 
 
 #endif // DCHECK_IS_ON()
 

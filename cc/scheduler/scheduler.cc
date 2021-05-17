@@ -155,7 +155,7 @@ void Scheduler::DidSubmitCompositorFrame()
 
 void Scheduler::DidReceiveCompositorFrameAck()
 {
-    DCHECK_GT(state_machine_.pending_submit_frames(), 0) << AsValue()->ToString();
+    DCHECK_GT(state_machine_.pending_submit_frames(), 0); // << AsValue()->ToString();
     compositor_timing_history_->DidReceiveCompositorFrameAck();
     state_machine_.DidReceiveCompositorFrameAck();
     ProcessScheduledActions();

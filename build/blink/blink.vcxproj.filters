@@ -10932,9 +10932,6 @@
     <ClCompile Include="..\..\gen\blink\core\EventFactory.cpp">
       <Filter>gen\blink\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\content\browser\RenderViewHost.cc">
-      <Filter>content\browser</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\content\browser\RenderWidgetCompositor.cpp">
       <Filter>content\browser</Filter>
     </ClCompile>
@@ -11139,17 +11136,14 @@
     <ClCompile Include="..\..\gen\blink\core\WMLNames.cpp">
       <Filter>gen\blink\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\gen\blink\core\WMLElementFactory.cpp">
-      <Filter>gen\blink\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\tencent\third_party\WebKit\SpecialSiteDetect.cpp">
-      <Filter>tencent\third_party\WebKit</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\gen\blink\bindings\core\v8\V8ConsoleBase.cpp">
       <Filter>gen\blink\bindings\core\v8</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\wbmp\WBMPImageDecoder.cpp">
       <Filter>third_party\WebKit\Source\platform\image-decoders\wbmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\browser\RenderViewHost.cc">
+      <Filter>content\browser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -24595,6 +24589,9 @@
     </ClInclude>
     <ClInclude Include="..\..\gen\blink\bindings\core\v8\V8ConsoleBase.h">
       <Filter>gen\blink\bindings\core\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\config.h">
+      <Filter>third_party\WebKit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

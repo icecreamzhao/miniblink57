@@ -120,9 +120,7 @@ void HistogramSnapshotManager::PrepareSamples(
     // Get information known about this histogram.
     SampleInfo* sample_info = &known_histograms_[histogram->name_hash()];
     if (sample_info->histogram) {
-        DCHECK_EQ(sample_info->histogram->histogram_name(),
-            histogram->histogram_name())
-            << "hash collision";
+        DCHECK_EQ(sample_info->histogram->histogram_name(), histogram->histogram_name()); // << "hash collision";
     } else {
         // First time this histogram has been seen; datafill.
         sample_info->histogram = histogram;

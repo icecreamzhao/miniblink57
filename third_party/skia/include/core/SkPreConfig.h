@@ -257,4 +257,17 @@
 #define SK_ATTRIBUTE_OPTIMIZE_O1 /* nothing */
 #endif
 
+#include <xlocnum>
+#include <xiosbase>
+#include <iterator>
+#include <bitset>
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <functional>
+#include <ratio>
+#include <chrono>
+
 #endif

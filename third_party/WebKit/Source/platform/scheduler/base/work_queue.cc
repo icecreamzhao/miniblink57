@@ -65,10 +65,7 @@ namespace scheduler {
             if (work_queue_.empty() || BlockedByFence())
                 return false;
             // Quick sanity check.
-            DCHECK_LE(work_queue_.front().enqueue_order(),
-                work_queue_.back().enqueue_order())
-                << task_queue_->GetName() << " : " << work_queue_sets_->name() << " : "
-                << name_;
+            DCHECK_LE(work_queue_.front().enqueue_order(), work_queue_.back().enqueue_order()); // << task_queue_->GetName() << " : " << work_queue_sets_->name() << " : " << name_;
             *enqueue_order = work_queue_.front().enqueue_order();
             return true;
         }

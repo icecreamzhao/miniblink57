@@ -16,8 +16,8 @@
 #include "build/build_config.h"
 
 #if defined(OS_WIN)
-#include <shellapi.h>
 #include <windows.h>
+#include <shellapi.h>
 #endif
 
 namespace base {

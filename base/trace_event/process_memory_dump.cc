@@ -76,78 +76,79 @@ namespace trace_event {
     }
 
     // static
-    size_t ProcessMemoryDump::CountResidentBytes(void* start_address,
-        size_t mapped_size)
+    size_t ProcessMemoryDump::CountResidentBytes(void* start_address, size_t mapped_size)
     {
-        const size_t page_size = GetSystemPageSize();
-        const uintptr_t start_pointer = reinterpret_cast<uintptr_t>(start_address);
-        DCHECK_EQ(0u, start_pointer % page_size);
-
-        size_t offset = 0;
-        size_t total_resident_size = 0;
-        bool failure = false;
-
-        // An array as large as number of pages in memory segment needs to be passed
-        // to the query function. To avoid allocating a large array, the given block
-        // of memory is split into chunks of size |kMaxChunkSize|.
-        const size_t kMaxChunkSize = 8 * 1024 * 1024;
-        size_t max_vec_size = GetSystemPageCount(std::min(mapped_size, kMaxChunkSize), page_size);
-#if defined(OS_MACOSX) || defined(OS_IOS)
-        std::unique_ptr<char[]> vec(new char[max_vec_size]);
-#elif defined(OS_WIN)
-        std::unique_ptr<PSAPI_WORKING_SET_EX_INFORMATION[]> vec(
-            new PSAPI_WORKING_SET_EX_INFORMATION[max_vec_size]);
-#elif defined(OS_POSIX)
-        std::unique_ptr<unsigned char[]> vec(new unsigned char[max_vec_size]);
-#endif
-
-        while (offset < mapped_size) {
-            uintptr_t chunk_start = (start_pointer + offset);
-            const size_t chunk_size = std::min(mapped_size - offset, kMaxChunkSize);
-            const size_t page_count = GetSystemPageCount(chunk_size, page_size);
-            size_t resident_page_count = 0;
-
-#if defined(OS_MACOSX) || defined(OS_IOS)
-            // mincore in MAC does not fail with EAGAIN.
-            failure = !!mincore(reinterpret_cast<void*>(chunk_start), chunk_size, vec.get());
-            for (size_t i = 0; i < page_count; i++)
-                resident_page_count += vec[i] & MINCORE_INCORE ? 1 : 0;
-#elif defined(OS_WIN)
-            for (size_t i = 0; i < page_count; i++) {
-                vec[i].VirtualAddress = reinterpret_cast<void*>(chunk_start + i * page_size);
-            }
-            DWORD vec_size = static_cast<DWORD>(
-                page_count * sizeof(PSAPI_WORKING_SET_EX_INFORMATION));
-            failure = !QueryWorkingSetEx(GetCurrentProcess(), vec.get(), vec_size);
-
-            for (size_t i = 0; i < page_count; i++)
-                resident_page_count += vec[i].VirtualAttributes.Valid;
-#elif defined(OS_POSIX)
-            int error_counter = 0;
-            int result = 0;
-            // HANDLE_EINTR tries for 100 times. So following the same pattern.
-            do {
-                result = mincore(reinterpret_cast<void*>(chunk_start), chunk_size, vec.get());
-            } while (result == -1 && errno == EAGAIN && error_counter++ < 100);
-            failure = !!result;
-
-            for (size_t i = 0; i < page_count; i++)
-                resident_page_count += vec[i] & 1;
-#endif
-
-            if (failure)
-                break;
-
-            total_resident_size += resident_page_count * page_size;
-            offset += kMaxChunkSize;
-        }
-
-        DCHECK(!failure);
-        if (failure) {
-            total_resident_size = 0;
-            LOG(ERROR) << "CountResidentBytes failed. The resident size is invalid";
-        }
-        return total_resident_size;
+        DebugBreak();
+        return false;
+//         const size_t page_size = GetSystemPageSize();
+//         const uintptr_t start_pointer = reinterpret_cast<uintptr_t>(start_address);
+//         DCHECK_EQ(0u, start_pointer % page_size);
+// 
+//         size_t offset = 0;
+//         size_t total_resident_size = 0;
+//         bool failure = false;
+// 
+//         // An array as large as number of pages in memory segment needs to be passed
+//         // to the query function. To avoid allocating a large array, the given block
+//         // of memory is split into chunks of size |kMaxChunkSize|.
+//         const size_t kMaxChunkSize = 8 * 1024 * 1024;
+//         size_t max_vec_size = GetSystemPageCount(std::min(mapped_size, kMaxChunkSize), page_size);
+// #if defined(OS_MACOSX) || defined(OS_IOS)
+//         std::unique_ptr<char[]> vec(new char[max_vec_size]);
+// #elif defined(OS_WIN)
+//         std::unique_ptr<PSAPI_WORKING_SET_EX_INFORMATION[]> vec(
+//             new PSAPI_WORKING_SET_EX_INFORMATION[max_vec_size]);
+// #elif defined(OS_POSIX)
+//         std::unique_ptr<unsigned char[]> vec(new unsigned char[max_vec_size]);
+// #endif
+// 
+//         while (offset < mapped_size) {
+//             uintptr_t chunk_start = (start_pointer + offset);
+//             const size_t chunk_size = std::min(mapped_size - offset, kMaxChunkSize);
+//             const size_t page_count = GetSystemPageCount(chunk_size, page_size);
+//             size_t resident_page_count = 0;
+// 
+// #if defined(OS_MACOSX) || defined(OS_IOS)
+//             // mincore in MAC does not fail with EAGAIN.
+//             failure = !!mincore(reinterpret_cast<void*>(chunk_start), chunk_size, vec.get());
+//             for (size_t i = 0; i < page_count; i++)
+//                 resident_page_count += vec[i] & MINCORE_INCORE ? 1 : 0;
+// #elif defined(OS_WIN)
+//             for (size_t i = 0; i < page_count; i++) {
+//                 vec[i].VirtualAddress = reinterpret_cast<void*>(chunk_start + i * page_size);
+//             }
+//             DWORD vec_size = static_cast<DWORD>(
+//                 page_count * sizeof(PSAPI_WORKING_SET_EX_INFORMATION));
+//             failure = !QueryWorkingSetEx(GetCurrentProcess(), vec.get(), vec_size);
+// 
+//             for (size_t i = 0; i < page_count; i++)
+//                 resident_page_count += vec[i].VirtualAttributes.Valid;
+// #elif defined(OS_POSIX)
+//             int error_counter = 0;
+//             int result = 0;
+//             // HANDLE_EINTR tries for 100 times. So following the same pattern.
+//             do {
+//                 result = mincore(reinterpret_cast<void*>(chunk_start), chunk_size, vec.get());
+//             } while (result == -1 && errno == EAGAIN && error_counter++ < 100);
+//             failure = !!result;
+// 
+//             for (size_t i = 0; i < page_count; i++)
+//                 resident_page_count += vec[i] & 1;
+// #endif
+// 
+//             if (failure)
+//                 break;
+// 
+//             total_resident_size += resident_page_count * page_size;
+//             offset += kMaxChunkSize;
+//         }
+// 
+//         DCHECK(!failure);
+//         if (failure) {
+//             total_resident_size = 0;
+//             LOG(ERROR) << "CountResidentBytes failed. The resident size is invalid";
+//         }
+//         return total_resident_size;
     }
 #endif // defined(COUNT_RESIDENT_BYTES_SUPPORTED)
 

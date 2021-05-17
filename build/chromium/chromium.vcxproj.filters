@@ -4111,7 +4111,6 @@
     <None Include="..\..\cc\surfaces\OWNERS">
       <Filter>cc\surfaces</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
     <None Include="..\..\url\OWNERS">
       <Filter>url\third_party</Filter>
     </None>

@@ -5,6 +5,11 @@
 #ifndef CC_PLAYBACK_SKIP_IMAGE_CANVAS_H_
 #define CC_PLAYBACK_SKIP_IMAGE_CANVAS_H_
 
+#include <limits>
+#include <xutility>
+#include <xmemory>
+#include <tuple>
+#include <atomic>
 #include "third_party/skia/include/utils/SkPaintFilterCanvas.h"
 
 namespace cc {

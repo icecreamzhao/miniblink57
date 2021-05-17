@@ -33,7 +33,7 @@ namespace v8 {
 namespace internal {
 
 void* Malloced::New(size_t size) {
-#ifdef _DEBUG
+#if 1 // def _DEBUG
   void* result = malloc(size);
 #else
   void* result = WTF::fastMalloc(size);
@@ -46,7 +46,7 @@ void* Malloced::New(size_t size) {
 
 
 void Malloced::Delete(void* p) {
-#ifdef _DEBUG
+#if 1 // def _DEBUG
   free(p);
 #else
   WTF::fastFree(p);

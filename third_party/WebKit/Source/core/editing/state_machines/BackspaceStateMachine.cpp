@@ -46,8 +46,7 @@ enum class BackspaceStateMachine::BackspaceState {
 #undef V
 };
 
-std::ostream& operator<<(std::ostream& os,
-    BackspaceStateMachine::BackspaceState state)
+std::ostream& operator<<(std::ostream& os, BackspaceStateMachine::BackspaceState state)
 {
     static const char* const texts[] = {
 #define V(name) #name,
@@ -55,8 +54,8 @@ std::ostream& operator<<(std::ostream& os,
 #undef V
     };
     const auto& it = std::begin(texts) + static_cast<size_t>(state);
-    DCHECK_GE(it, std::begin(texts)) << "Unknown backspace value";
-    DCHECK_LT(it, std::end(texts)) << "Unknown backspace value";
+    DCHECK_GE(it, std::begin(texts)); // << "Unknown backspace value";
+    DCHECK_LT(it, std::end(texts)); // << "Unknown backspace value";
     return os << *it;
 }
 
@@ -245,10 +244,10 @@ void BackspaceStateMachine::reset()
 TextSegmentationMachineState BackspaceStateMachine::moveToNextState(
     BackspaceState newState)
 {
-    DCHECK_NE(BackspaceState::Finished, newState) << "Use finish() instead.";
-    DCHECK_NE(BackspaceState::Start, newState) << "Don't move to Start.";
+    DCHECK_NE(BackspaceState::Finished, newState); // << "Use finish() instead.";
+    DCHECK_NE(BackspaceState::Start, newState); // << "Don't move to Start.";
     // Below |DCHECK_NE()| prevent us to infinite loop in state machine.
-    DCHECK_NE(m_state, newState) << "State should be changed.";
+    DCHECK_NE(m_state, newState); // << "State should be changed.";
     m_state = newState;
     return TextSegmentationMachineState::NeedMoreCodeUnit;
 }

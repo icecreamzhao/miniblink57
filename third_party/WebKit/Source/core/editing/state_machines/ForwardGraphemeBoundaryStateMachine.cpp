@@ -47,8 +47,8 @@ std::ostream& operator<<(
 #undef V
     };
     const auto& it = std::begin(texts) + static_cast<size_t>(state);
-    DCHECK_GE(it, std::begin(texts)) << "Unknown state value";
-    DCHECK_LT(it, std::end(texts)) << "Unknown state value";
+    DCHECK_GE(it, std::begin(texts)); // << "Unknown state value";
+    DCHECK_LT(it, std::end(texts)); // << "Unknown state value";
     return os << *it;
 }
 
@@ -227,8 +227,8 @@ TextSegmentationMachineState ForwardGraphemeBoundaryStateMachine::finish()
 TextSegmentationMachineState
 ForwardGraphemeBoundaryStateMachine::moveToNextState(InternalState nextState)
 {
-    DCHECK_NE(nextState, InternalState::Finished) << "Use finish() instead";
-    DCHECK_NE(nextState, m_internalState) << "Use staySameSatate() instead";
+    DCHECK_NE(nextState, InternalState::Finished); // << "Use finish() instead";
+    DCHECK_NE(nextState, m_internalState); // << "Use staySameSatate() instead";
     m_internalState = nextState;
     if (nextState == InternalState::StartForward)
         return TextSegmentationMachineState::NeedFollowingCodeUnit;
@@ -238,8 +238,7 @@ ForwardGraphemeBoundaryStateMachine::moveToNextState(InternalState nextState)
 TextSegmentationMachineState
 ForwardGraphemeBoundaryStateMachine::staySameState()
 {
-    DCHECK_EQ(m_internalState, InternalState::Search)
-        << "Only Search can stay the same state.";
+    DCHECK_EQ(m_internalState, InternalState::Search); // << "Only Search can stay the same state.";
     return TextSegmentationMachineState::NeedMoreCodeUnit;
 }
 

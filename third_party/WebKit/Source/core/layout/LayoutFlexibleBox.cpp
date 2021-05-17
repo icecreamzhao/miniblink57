@@ -955,8 +955,7 @@ LayoutUnit LayoutFlexibleBox::computeInnerFlexBaseSizeForChild(
         // width includes the scrollbar, even for overflow: auto.
         mainAxisExtent = child.maxPreferredLogicalWidth();
     }
-    DCHECK_GE(mainAxisExtent - mainAxisBorderAndPadding, LayoutUnit())
-        << mainAxisExtent << " - " << mainAxisBorderAndPadding;
+    DCHECK_GE(mainAxisExtent - mainAxisBorderAndPadding, LayoutUnit()); // << mainAxisExtent << " - " << mainAxisBorderAndPadding;
     return mainAxisExtent - mainAxisBorderAndPadding;
 }
 

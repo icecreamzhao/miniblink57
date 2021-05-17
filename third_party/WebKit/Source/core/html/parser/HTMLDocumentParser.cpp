@@ -62,7 +62,7 @@
 #include "wtf/PtrUtil.h"
 #include <memory>
 #ifdef TENCENT_FITSCREEN
-#include "tencent/third_party/WebKit/SpecialSiteDetect.h"
+//#include "tencent/third_party/WebKit/SpecialSiteDetect.h"
 #endif
 
 namespace blink {
@@ -957,7 +957,7 @@ void HTMLDocumentParser::attemptToRunDeferredScriptsAndEnd()
     if (m_scriptRunner && !m_scriptRunner->executeScriptsWaitingForParsing())
         return;
 
-    tencent::SpecialSiteDetect::injectScriptAndJsApi(document());
+    //tencent::SpecialSiteDetect::injectScriptAndJsApi(document());
 
     end();
 }

@@ -7,15 +7,15 @@
 #include <aclapi.h>
 #include <cfgmgr32.h>
 #include <initguid.h>
-#include <inspectable.h>
+//#include <inspectable.h>
 #include <powrprof.h>
 #include <propkey.h>
 #include <propvarutil.h>
 #include <psapi.h>
-#include <roapi.h>
+//#include <roapi.h>
 #include <sddl.h>
 #include <setupapi.h>
-#include <shellscalingapi.h>
+//#include <shellscalingapi.h>
 #include <shlwapi.h>
 #include <shobjidl.h> // Must be before propkey.
 #include <signal.h>
@@ -24,9 +24,9 @@
 #include <tchar.h> // Must be before tpcshrd.h or for any use of _T macro
 #include <tpcshrd.h>
 //#include <uiviewsettingsinterop.h>
-#include <windows.ui.viewmanagement.h>
-#include <winstring.h>
-#include <wrl/wrappers/corewrappers.h>
+//#include <windows.ui.viewmanagement.h>
+//#include <winstring.h>
+//#include <wrl/wrappers/corewrappers.h>
 
 #include <memory>
 
@@ -69,7 +69,8 @@ namespace win {
             *((volatile int*)0) = 0x1337;
         }
 
-        typedef decltype(GetProcessMitigationPolicy)* GetProcessMitigationPolicyType;
+        //typedef decltype(GetProcessMitigationPolicy)* GetProcessMitigationPolicyType;
+        typedef BOOL (WINAPI* GetProcessMitigationPolicyType)(HANDLE hProcess, void* MitigationPolicy, PVOID lpBuffer, SIZE_T dwLength);
 
         class LazyIsUser32AndGdi32Available {
         public:
@@ -85,23 +86,22 @@ namespace win {
         private:
             static bool IsWin32kSyscallsDisabled()
             {
-                // Can't disable win32k prior to windows 8.
-                if (base::win::GetVersion() < base::win::VERSION_WIN8)
-                    return false;
-
-                GetProcessMitigationPolicyType get_process_mitigation_policy_func = reinterpret_cast<GetProcessMitigationPolicyType>(GetProcAddress(
-                    GetModuleHandle(L"kernel32.dll"), "GetProcessMitigationPolicy"));
-
-                if (!get_process_mitigation_policy_func)
-                    return false;
-
-                PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY policy = {};
-                if (get_process_mitigation_policy_func(GetCurrentProcess(),
-                        ProcessSystemCallDisablePolicy,
-                        &policy, sizeof(policy))) {
-                    return policy.DisallowWin32kSystemCalls != 0;
-                }
-
+//                 // Can't disable win32k prior to windows 8.
+//                 if (base::win::GetVersion() < base::win::VERSION_WIN8)
+//                     return false;
+// 
+//                 GetProcessMitigationPolicyType get_process_mitigation_policy_func = reinterpret_cast<GetProcessMitigationPolicyType>(GetProcAddress(
+//                     GetModuleHandle(L"kernel32.dll"), "GetProcessMitigationPolicy"));
+// 
+//                 if (!get_process_mitigation_policy_func)
+//                     return false;
+// 
+//                 PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY policy = {};
+//                 if (get_process_mitigation_policy_func(GetCurrentProcess(),
+//                         ProcessSystemCallDisablePolicy,
+//                         &policy, sizeof(policy))) {
+//                     return policy.DisallowWin32kSystemCalls != 0;
+//                 }
                 return false;
             }
 
@@ -493,56 +493,58 @@ namespace win {
 
     bool IsTabletDevice(std::string* reason)
     {
-        if (GetVersion() < VERSION_WIN8) {
-            if (reason)
-                *reason = "Tablet device detection not supported below Windows 8\n";
-            return false;
-        }
-
-        if (IsWindows10TabletMode(::GetForegroundWindow()))
-            return true;
-
-        if (GetSystemMetrics(SM_MAXIMUMTOUCHES) == 0) {
-            if (reason) {
-                *reason += "Device does not support touch.\n";
-            } else {
-                return false;
-            }
-        }
-
-        // If the device is docked, the user is treating the device as a PC.
-        if (GetSystemMetrics(SM_SYSTEMDOCKED) != 0) {
-            if (reason) {
-                *reason += "SM_SYSTEMDOCKED\n";
-            } else {
-                return false;
-            }
-        }
-
-        // PlatformRoleSlate was added in Windows 8+.
-        POWER_PLATFORM_ROLE role = GetPlatformRole();
-        bool mobile_power_profile = (role == PlatformRoleMobile);
-        bool slate_power_profile = (role == PlatformRoleSlate);
-
-        bool is_tablet = false;
-        if (mobile_power_profile || slate_power_profile) {
-            is_tablet = !GetSystemMetrics(SM_CONVERTIBLESLATEMODE);
-            if (!is_tablet) {
-                if (reason) {
-                    *reason += "Not in slate mode.\n";
-                } else {
-                    return false;
-                }
-            } else {
-                if (reason) {
-                    *reason += (role == PlatformRoleMobile) ? "PlatformRoleMobile\n" : "PlatformRoleSlate\n";
-                }
-            }
-        } else {
-            if (reason)
-                *reason += "Device role is not mobile or slate.\n";
-        }
-        return is_tablet;
+        DebugBreak();
+        return false;
+//         if (GetVersion() < VERSION_WIN8) {
+//             if (reason)
+//                 *reason = "Tablet device detection not supported below Windows 8\n";
+//             return false;
+//         }
+// 
+//         if (IsWindows10TabletMode(::GetForegroundWindow()))
+//             return true;
+// 
+//         if (GetSystemMetrics(SM_MAXIMUMTOUCHES) == 0) {
+//             if (reason) {
+//                 *reason += "Device does not support touch.\n";
+//             } else {
+//                 return false;
+//             }
+//         }
+// 
+//         // If the device is docked, the user is treating the device as a PC.
+//         if (GetSystemMetrics(SM_SYSTEMDOCKED) != 0) {
+//             if (reason) {
+//                 *reason += "SM_SYSTEMDOCKED\n";
+//             } else {
+//                 return false;
+//             }
+//         }
+// 
+//         // PlatformRoleSlate was added in Windows 8+.
+//         POWER_PLATFORM_ROLE role = GetPlatformRole();
+//         bool mobile_power_profile = (role == PlatformRoleMobile);
+//         bool slate_power_profile = (role == PlatformRoleSlate);
+// 
+//         bool is_tablet = false;
+//         if (mobile_power_profile || slate_power_profile) {
+//             is_tablet = !GetSystemMetrics(SM_CONVERTIBLESLATEMODE);
+//             if (!is_tablet) {
+//                 if (reason) {
+//                     *reason += "Not in slate mode.\n";
+//                 } else {
+//                     return false;
+//                 }
+//             } else {
+//                 if (reason) {
+//                     *reason += (role == PlatformRoleMobile) ? "PlatformRoleMobile\n" : "PlatformRoleSlate\n";
+//                 }
+//             }
+//         } else {
+//             if (reason)
+//                 *reason += "Device role is not mobile or slate.\n";
+//         }
+//         return is_tablet;
     }
 
     enum DomainEnrollmentState { UNKNOWN = -1,
@@ -576,46 +578,48 @@ namespace win {
 
     bool GetLoadedModulesSnapshot(HANDLE process, std::vector<HMODULE>* snapshot)
     {
-        DCHECK(snapshot);
-        DCHECK_EQ(0u, snapshot->size());
-        snapshot->resize(128);
-
-        // We will retry at least once after first determining |bytes_required|. If
-        // the list of modules changes after we receive |bytes_required| we may retry
-        // more than once.
-        int retries_remaining = 5;
-        do {
-            DWORD bytes_required = 0;
-            // EnumProcessModules returns 'success' even if the buffer size is too
-            // small.
-            DCHECK_GE(std::numeric_limits<DWORD>::max(),
-                snapshot->size() * sizeof(HMODULE));
-            if (!::EnumProcessModules(
-                    process, &(*snapshot)[0],
-                    static_cast<DWORD>(snapshot->size() * sizeof(HMODULE)),
-                    &bytes_required)) {
-                DPLOG(ERROR) << "::EnumProcessModules failed.";
-                return false;
-            }
-            DCHECK_EQ(0u, bytes_required % sizeof(HMODULE));
-            size_t num_modules = bytes_required / sizeof(HMODULE);
-            if (num_modules <= snapshot->size()) {
-                // Buffer size was too big, presumably because a module was unloaded.
-                snapshot->erase(snapshot->begin() + num_modules, snapshot->end());
-                return true;
-            } else if (num_modules == 0) {
-                DLOG(ERROR) << "Can't determine the module list size.";
-                return false;
-            } else {
-                // Buffer size was too small. Try again with a larger buffer. A little
-                // more room is given to avoid multiple expensive calls to
-                // ::EnumProcessModules() just because one module has been added.
-                snapshot->resize(num_modules + 8, NULL);
-            }
-        } while (--retries_remaining);
-
-        DLOG(ERROR) << "Failed to enumerate modules.";
+        DebugBreak();
         return false;
+//         DCHECK(snapshot);
+//         DCHECK_EQ(0u, snapshot->size());
+//         snapshot->resize(128);
+// 
+//         // We will retry at least once after first determining |bytes_required|. If
+//         // the list of modules changes after we receive |bytes_required| we may retry
+//         // more than once.
+//         int retries_remaining = 5;
+//         do {
+//             DWORD bytes_required = 0;
+//             // EnumProcessModules returns 'success' even if the buffer size is too
+//             // small.
+//             DCHECK_GE(std::numeric_limits<DWORD>::max(),
+//                 snapshot->size() * sizeof(HMODULE));
+//             if (!::EnumProcessModules(
+//                     process, &(*snapshot)[0],
+//                     static_cast<DWORD>(snapshot->size() * sizeof(HMODULE)),
+//                     &bytes_required)) {
+//                 DPLOG(ERROR) << "::EnumProcessModules failed.";
+//                 return false;
+//             }
+//             DCHECK_EQ(0u, bytes_required % sizeof(HMODULE));
+//             size_t num_modules = bytes_required / sizeof(HMODULE);
+//             if (num_modules <= snapshot->size()) {
+//                 // Buffer size was too big, presumably because a module was unloaded.
+//                 snapshot->erase(snapshot->begin() + num_modules, snapshot->end());
+//                 return true;
+//             } else if (num_modules == 0) {
+//                 DLOG(ERROR) << "Can't determine the module list size.";
+//                 return false;
+//             } else {
+//                 // Buffer size was too small. Try again with a larger buffer. A little
+//                 // more room is given to avoid multiple expensive calls to
+//                 // ::EnumProcessModules() just because one module has been added.
+//                 snapshot->resize(num_modules + 8, NULL);
+//             }
+//         } while (--retries_remaining);
+// 
+//         DLOG(ERROR) << "Failed to enumerate modules.";
+//         return false;
     }
 
     void EnableFlicks(HWND hwnd)
@@ -631,26 +635,28 @@ namespace win {
 
     bool IsProcessPerMonitorDpiAware()
     {
-        enum class PerMonitorDpiAware {
-            UNKNOWN = 0,
-            PER_MONITOR_DPI_UNAWARE,
-            PER_MONITOR_DPI_AWARE,
-        };
-        static PerMonitorDpiAware per_monitor_dpi_aware = PerMonitorDpiAware::UNKNOWN;
-        if (per_monitor_dpi_aware == PerMonitorDpiAware::UNKNOWN) {
-            per_monitor_dpi_aware = PerMonitorDpiAware::PER_MONITOR_DPI_UNAWARE;
-            HMODULE shcore_dll = ::LoadLibrary(L"shcore.dll");
-            if (shcore_dll) {
-                auto get_process_dpi_awareness_func = reinterpret_cast<decltype(::GetProcessDpiAwareness)*>(
-                    ::GetProcAddress(shcore_dll, "GetProcessDpiAwareness"));
-                if (get_process_dpi_awareness_func) {
-                    PROCESS_DPI_AWARENESS awareness;
-                    if (SUCCEEDED(get_process_dpi_awareness_func(nullptr, &awareness)) && awareness == PROCESS_PER_MONITOR_DPI_AWARE)
-                        per_monitor_dpi_aware = PerMonitorDpiAware::PER_MONITOR_DPI_AWARE;
-                }
-            }
-        }
-        return per_monitor_dpi_aware == PerMonitorDpiAware::PER_MONITOR_DPI_AWARE;
+//         enum class PerMonitorDpiAware {
+//             UNKNOWN = 0,
+//             PER_MONITOR_DPI_UNAWARE,
+//             PER_MONITOR_DPI_AWARE,
+//         };
+//         static PerMonitorDpiAware per_monitor_dpi_aware = PerMonitorDpiAware::UNKNOWN;
+//         if (per_monitor_dpi_aware == PerMonitorDpiAware::UNKNOWN) {
+//             per_monitor_dpi_aware = PerMonitorDpiAware::PER_MONITOR_DPI_UNAWARE;
+//             HMODULE shcore_dll = ::LoadLibrary(L"shcore.dll");
+//             if (shcore_dll) {
+//                 auto get_process_dpi_awareness_func = reinterpret_cast<decltype(::GetProcessDpiAwareness)*>(
+//                     ::GetProcAddress(shcore_dll, "GetProcessDpiAwareness"));
+//                 if (get_process_dpi_awareness_func) {
+//                     PROCESS_DPI_AWARENESS awareness;
+//                     if (SUCCEEDED(get_process_dpi_awareness_func(nullptr, &awareness)) && awareness == PROCESS_PER_MONITOR_DPI_AWARE)
+//                         per_monitor_dpi_aware = PerMonitorDpiAware::PER_MONITOR_DPI_AWARE;
+//                 }
+//             }
+//         }
+//         return per_monitor_dpi_aware == PerMonitorDpiAware::PER_MONITOR_DPI_AWARE;
+        DebugBreak();
+        return false;
     }
 
 } // namespace win

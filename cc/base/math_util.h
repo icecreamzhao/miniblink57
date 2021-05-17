@@ -5,6 +5,9 @@
 #ifndef CC_BASE_MATH_UTIL_H_
 #define CC_BASE_MATH_UTIL_H_
 
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
 #include <algorithm>
 #include <cmath>
 #include <memory>

@@ -105,7 +105,7 @@
 #if COMPILER_GCC && defined(NDEBUG)
 #define ALWAYS_INLINE inline __attribute__((__always_inline__))
 #elif COMPILER_MSVC && defined(NDEBUG)
-#define ALWAYS_INLINE __forceinline
+#define ALWAYS_INLINE inline // __forceinline
 #else
 #define ALWAYS_INLINE inline
 #endif
@@ -231,5 +231,11 @@
 #else
 #define HAS_FEATURE(FEATURE) 0
 #endif
+
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
+#include <set>
+#include <algorithm>
 
 #endif // BASE_COMPILER_SPECIFIC_H_

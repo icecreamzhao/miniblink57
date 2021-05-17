@@ -308,7 +308,7 @@ File::Error File::OSErrorToFileError(DWORD last_error)
         return FILE_ERROR_NO_MEMORY;
     case ERROR_HANDLE_DISK_FULL:
     case ERROR_DISK_FULL:
-    case ERROR_DISK_RESOURCES_EXHAUSTED:
+    case 314L/*ERROR_DISK_RESOURCES_EXHAUSTED*/:
         return FILE_ERROR_NO_SPACE;
     case ERROR_USER_MAPPED_FILE:
         return FILE_ERROR_INVALID_OPERATION;

@@ -6,6 +6,7 @@
 #include "base/logging.h"
 // #include "cc/proto/gfx_conversions.h"
 // #include "cc/proto/layer_selection_bound.pb.h"
+#include <windows.h>
 
 namespace cc {
 namespace {

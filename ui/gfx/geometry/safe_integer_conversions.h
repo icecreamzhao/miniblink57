@@ -11,6 +11,9 @@
 #include "base/numerics/safe_conversions.h"
 #include "ui/gfx/gfx_export.h"
 
+#undef max
+#undef min
+
 namespace gfx {
 
 inline int ToFlooredInt(float value)

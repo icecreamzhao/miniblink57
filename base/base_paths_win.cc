@@ -134,12 +134,12 @@ bool PathProviderWin(int key, FilePath* result)
         if (win::GetVersion() < win::VERSION_WIN8)
             return false;
 
-        base::win::ScopedCoMem<wchar_t> path_buf;
-        if (FAILED(SHGetKnownFolderPath(FOLDERID_ApplicationShortcuts, 0, NULL,
-                &path_buf)))
-            return false;
-
-        cur = FilePath(string16(path_buf));
+//         base::win::ScopedCoMem<wchar_t> path_buf;
+//         if (FAILED(SHGetKnownFolderPath(FOLDERID_ApplicationShortcuts, 0, NULL, &path_buf)))
+//             return false;
+// 
+//         cur = FilePath(string16(path_buf));
+        DebugBreak();
         break;
     }
     case base::DIR_USER_DESKTOP:

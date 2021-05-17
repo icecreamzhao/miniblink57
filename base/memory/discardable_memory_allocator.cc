@@ -11,60 +11,60 @@
 namespace base {
 namespace {
 
-    DiscardableMemoryAllocator* g_allocator = nullptr;
+DiscardableMemoryAllocator* g_allocator = nullptr;
 
-    class TestingDiscardableMemory : public DiscardableMemory {
-    public:
-        explicit TestingDiscardableMemory(size_t size)
-            : m_isLocked(true)
-        {
-            m_data.resize(size);
-        }
-        ~TestingDiscardableMemory() override
-        {
-        }
+class TestingDiscardableMemory : public DiscardableMemory {
+public:
+    explicit TestingDiscardableMemory(size_t size)
+        : m_isLocked(true)
+    {
+        m_data.resize(size);
+    }
+    ~TestingDiscardableMemory() override
+    {
+    }
 
-        // WebDiscardableMemory:
-        virtual bool Lock() override
-        {
-            ASSERT(!m_isLocked);
-            m_isLocked = true;
-            return false;
-        }
+    // WebDiscardableMemory:
+    virtual bool Lock() override
+    {
+        //ASSERT(!m_isLocked);
+        m_isLocked = true;
+        return false;
+    }
 
-        virtual void* data() const override
-        {
-            ASSERT(m_isLocked);
-            return (void*)(m_data.data());
-        }
+    virtual void* data() const override
+    {
+        //ASSERT(m_isLocked);
+        return (void*)(m_data.data());
+    }
 
-        virtual void Unlock() override
-        {
-            ASSERT(m_isLocked);
-            m_isLocked = false;
-            // Force eviction to catch clients not correctly checking the return value of lock().
-            memset(m_data.data(), 0, m_data.size());
-        }
+    virtual void Unlock() override
+    {
+        //ASSERT(m_isLocked);
+        m_isLocked = false;
+        // Force eviction to catch clients not correctly checking the return value of lock().
+        memset(m_data.data(), 0, m_data.size());
+    }
 
-        virtual trace_event::MemoryAllocatorDump* CreateMemoryAllocatorDump(
-            const char* name,
-            trace_event::ProcessMemoryDump* pmd) const override
-        {
-            return nullptr;
-        }
+    virtual trace_event::MemoryAllocatorDump* CreateMemoryAllocatorDump(
+        const char* name,
+        trace_event::ProcessMemoryDump* pmd) const override
+    {
+        return nullptr;
+    }
 
-    private:
-        std::vector<char> m_data;
-        bool m_isLocked;
-    };
+private:
+    std::vector<char> m_data;
+    bool m_isLocked;
+};
 
-    class WebDiscardableMemoryAllocator : public DiscardableMemoryAllocator {
-    public:
-        virtual std::unique_ptr<DiscardableMemory> AllocateLockedDiscardableMemory(size_t size) override
-        {
-            return std::unique_ptr<DiscardableMemory>(new TestingDiscardableMemory(size));
-        }
-    };
+class WebDiscardableMemoryAllocator : public DiscardableMemoryAllocator {
+public:
+    virtual std::unique_ptr<DiscardableMemory> AllocateLockedDiscardableMemory(size_t size) override
+    {
+        return std::unique_ptr<DiscardableMemory>(new TestingDiscardableMemory(size));
+    }
+};
 
 } // namespace
 

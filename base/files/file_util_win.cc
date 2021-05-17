@@ -512,58 +512,61 @@ bool DevicePathToDriveLetterPath(const FilePath& nt_device_path,
 
 bool NormalizeToNativeFilePath(const FilePath& path, FilePath* nt_path)
 {
-    ThreadRestrictions::AssertIOAllowed();
-    // In Vista, GetFinalPathNameByHandle() would give us the real path
-    // from a file handle.  If we ever deprecate XP, consider changing the
-    // code below to a call to GetFinalPathNameByHandle().  The method this
-    // function uses is explained in the following msdn article:
-    // http://msdn.microsoft.com/en-us/library/aa366789(VS.85).aspx
-    win::ScopedHandle file_handle(
-        ::CreateFile(path.value().c_str(),
-            GENERIC_READ,
-            kFileShareAll,
-            NULL,
-            OPEN_EXISTING,
-            FILE_ATTRIBUTE_NORMAL,
-            NULL));
-    if (!file_handle.IsValid())
-        return false;
+    DebugBreak();
+    return false;
 
-    // Create a file mapping object.  Can't easily use MemoryMappedFile, because
-    // we only map the first byte, and need direct access to the handle. You can
-    // not map an empty file, this call fails in that case.
-    win::ScopedHandle file_map_handle(
-        ::CreateFileMapping(file_handle.Get(),
-            NULL,
-            PAGE_READONLY,
-            0,
-            1, // Just one byte.  No need to look at the data.
-            NULL));
-    if (!file_map_handle.IsValid())
-        return false;
-
-    // Use a view of the file to get the path to the file.
-    void* file_view = MapViewOfFile(file_map_handle.Get(),
-        FILE_MAP_READ, 0, 0, 1);
-    if (!file_view)
-        return false;
-
-    // The expansion of |path| into a full path may make it longer.
-    // GetMappedFileName() will fail if the result is longer than MAX_PATH.
-    // Pad a bit to be safe.  If kMaxPathLength is ever changed to be less
-    // than MAX_PATH, it would be nessisary to test that GetMappedFileName()
-    // not return kMaxPathLength.  This would mean that only part of the
-    // path fit in |mapped_file_path|.
-    const int kMaxPathLength = MAX_PATH + 10;
-    wchar_t mapped_file_path[kMaxPathLength];
-    bool success = false;
-    HANDLE cp = GetCurrentProcess();
-    if (::GetMappedFileNameW(cp, file_view, mapped_file_path, kMaxPathLength)) {
-        *nt_path = FilePath(mapped_file_path);
-        success = true;
-    }
-    ::UnmapViewOfFile(file_view);
-    return success;
+//     ThreadRestrictions::AssertIOAllowed();
+//     // In Vista, GetFinalPathNameByHandle() would give us the real path
+//     // from a file handle.  If we ever deprecate XP, consider changing the
+//     // code below to a call to GetFinalPathNameByHandle().  The method this
+//     // function uses is explained in the following msdn article:
+//     // http://msdn.microsoft.com/en-us/library/aa366789(VS.85).aspx
+//     win::ScopedHandle file_handle(
+//         ::CreateFile(path.value().c_str(),
+//             GENERIC_READ,
+//             kFileShareAll,
+//             NULL,
+//             OPEN_EXISTING,
+//             FILE_ATTRIBUTE_NORMAL,
+//             NULL));
+//     if (!file_handle.IsValid())
+//         return false;
+// 
+//     // Create a file mapping object.  Can't easily use MemoryMappedFile, because
+//     // we only map the first byte, and need direct access to the handle. You can
+//     // not map an empty file, this call fails in that case.
+//     win::ScopedHandle file_map_handle(
+//         ::CreateFileMapping(file_handle.Get(),
+//             NULL,
+//             PAGE_READONLY,
+//             0,
+//             1, // Just one byte.  No need to look at the data.
+//             NULL));
+//     if (!file_map_handle.IsValid())
+//         return false;
+// 
+//     // Use a view of the file to get the path to the file.
+//     void* file_view = MapViewOfFile(file_map_handle.Get(),
+//         FILE_MAP_READ, 0, 0, 1);
+//     if (!file_view)
+//         return false;
+// 
+//     // The expansion of |path| into a full path may make it longer.
+//     // GetMappedFileName() will fail if the result is longer than MAX_PATH.
+//     // Pad a bit to be safe.  If kMaxPathLength is ever changed to be less
+//     // than MAX_PATH, it would be nessisary to test that GetMappedFileName()
+//     // not return kMaxPathLength.  This would mean that only part of the
+//     // path fit in |mapped_file_path|.
+//     const int kMaxPathLength = MAX_PATH + 10;
+//     wchar_t mapped_file_path[kMaxPathLength];
+//     bool success = false;
+//     HANDLE cp = GetCurrentProcess();
+//     if (::GetMappedFileNameW(cp, file_view, mapped_file_path, kMaxPathLength)) {
+//         *nt_path = FilePath(mapped_file_path);
+//         success = true;
+//     }
+//     ::UnmapViewOfFile(file_view);
+//     return success;
 }
 
 bool IsOnNetworkDrive(const base::FilePath& path)

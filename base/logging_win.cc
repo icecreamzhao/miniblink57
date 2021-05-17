@@ -5,6 +5,19 @@
 #include "base/logging_win.h"
 #include "base/memory/singleton.h"
 #include <initguid.h> // NOLINT
+#include <windows.h>
+
+#define TRACE_LEVEL_NONE        0   // Tracing is not on
+#define TRACE_LEVEL_CRITICAL    1   // Abnormal exit or termination
+#define TRACE_LEVEL_FATAL       1   // Deprecated name for Abnormal exit or termination
+#define TRACE_LEVEL_ERROR       2   // Severe errors that need logging
+#define TRACE_LEVEL_WARNING     3   // Warnings such as allocation failure
+#define TRACE_LEVEL_INFORMATION 4   // Includes non-error cases(e.g.,Entry-Exit)
+#define TRACE_LEVEL_VERBOSE     5   // Detailed traces from intermediate steps
+#define TRACE_LEVEL_RESERVED6   6
+#define TRACE_LEVEL_RESERVED7   7
+#define TRACE_LEVEL_RESERVED8   8
+#define TRACE_LEVEL_RESERVED9   9
 
 namespace logging {
 

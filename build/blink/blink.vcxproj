@@ -15,12 +15,12 @@
     <RootNamespace>blink</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>blink</ProjectName>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -86,7 +86,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../;../../v8/;../../v8/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../;../../v8_5_7/;../../v8_5_7/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>config.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4800;4291;4996;4244;4305;4530;</DisableSpecificWarnings>
       <ForcedIncludeFiles>config.h</ForcedIncludeFiles>
@@ -104,7 +104,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>$(SolutionDir)..\release\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>v8.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>v8_5_7_1.lib;chromium.lib;libxml.lib;skia.lib;zlib.lib;ots.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:UNRESOLVED %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -786,7 +786,6 @@
     <ClCompile Include="..\..\gen\blink\core\SVGNames.cpp" />
     <ClCompile Include="..\..\gen\blink\core\timing\PerformanceObserverInit.cpp" />
     <ClCompile Include="..\..\gen\blink\core\UserAgentStyleSheetsData.cpp" />
-    <ClCompile Include="..\..\gen\blink\core\WMLElementFactory.cpp" />
     <ClCompile Include="..\..\gen\blink\core\WMLNames.cpp" />
     <ClCompile Include="..\..\gen\blink\core\XLinkNames.cpp" />
     <ClCompile Include="..\..\gen\blink\core\XMLNames.cpp" />
@@ -849,7 +848,6 @@
     <ClCompile Include="..\..\skia\ext\skia_utils_base.cc" />
     <ClCompile Include="..\..\skia\ext\skia_utils_win.cc" />
     <ClCompile Include="..\..\skia\ext\SkMemory_new_handler.cpp" />
-    <ClCompile Include="..\..\tencent\third_party\WebKit\SpecialSiteDetect.cpp" />
     <ClCompile Include="..\..\third_party\icu\source\uchar.cpp" />
     <ClCompile Include="..\..\third_party\modp_b64\modp_b64.cc" />
     <ClCompile Include="..\..\third_party\smhasher\src\Bitslice.cpp" />
@@ -4283,6 +4281,7 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\modules\v8\WebGLAny.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\build\mac\Prefix.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\build\win\Precompile.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\config.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\animation\animatable\AnimatableClipPathOperation.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\animation\animatable\AnimatableColor.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\animation\animatable\AnimatableDouble.h" />

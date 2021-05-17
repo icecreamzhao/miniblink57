@@ -11,6 +11,9 @@
 #include <climits>
 #include <limits>
 
+#undef max
+#undef min
+
 namespace base {
 namespace internal {
 

@@ -140,7 +140,7 @@
 #include "core/svg/SVGDocumentExtensions.h"
 #include "core/svg/SVGElement.h"
 #ifdef TENCENT_FITSCREEN
-#include "tencent/third_party/WebKit/SpecialSiteDetect.h"
+//#include "tencent/third_party/WebKit/SpecialSiteDetect.h"
 #endif
 #include "platform/EventDispatchForbiddenScope.h"
 #include "platform/RuntimeEnabledFeatures.h"
@@ -1327,9 +1327,9 @@ DISABLE_CFI_PERF
 void Element::attributeChanged(const AttributeModificationParams& params)
 {
     const QualifiedName& name = params.name;
-#ifdef TENCENT_FITSCREEN
-    tencent::SpecialSiteDetect::inst()->process(this, params.newValue);
-#endif
+// #ifdef TENCENT_FITSCREEN
+//     tencent::SpecialSiteDetect::inst()->process(this, params.newValue);
+// #endif
     if (ElementShadow* parentElementShadow = shadowWhereNodeCanBeDistributedForV0(*this)) {
         if (shouldInvalidateDistributionWhenAttributeChanged(parentElementShadow,
                 name, params.newValue))

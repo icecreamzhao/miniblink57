@@ -5,7 +5,14 @@
 #ifndef CC_ANIMATION_ANIMATION_PLAYER_H_
 #define CC_ANIMATION_ANIMATION_PLAYER_H_
 
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
+#include <algorithm>
 #include <vector>
+
+#undef max
+#undef min
 
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"

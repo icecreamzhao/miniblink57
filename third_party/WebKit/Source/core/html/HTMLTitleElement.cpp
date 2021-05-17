@@ -30,7 +30,7 @@
 #include "core/style/ComputedStyle.h"
 #include "core/style/StyleInheritedData.h"
 #ifdef TENCENT_FITSCREEN
-#include "tencent/third_party/WebKit/SpecialSiteDetect.h"
+//#include "tencent/third_party/WebKit/SpecialSiteDetect.h"
 #endif
 #include "wtf/AutoReset.h"
 #include "wtf/text/StringBuilder.h"
@@ -65,9 +65,9 @@ void HTMLTitleElement::removedFrom(ContainerNode* insertionPoint)
 
 void HTMLTitleElement::childrenChanged(const ChildrenChange& change)
 {
-#ifdef TENCENT_FITSCREEN
-    tencent::SpecialSiteDetect::inst()->process(this, text());
-#endif
+// #ifdef TENCENT_FITSCREEN
+//     tencent::SpecialSiteDetect::inst()->process(this, text());
+// #endif
     HTMLElement::childrenChanged(change);
     if (isInDocumentTree() && !m_ignoreTitleUpdatesWhenChildrenChange)
         document().setTitleElement(this);

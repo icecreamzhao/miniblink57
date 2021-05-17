@@ -64,10 +64,10 @@ struct DefaultLazyInstanceTraits {
 
     static Type* New(void* instance)
     {
-        DCHECK_EQ(reinterpret_cast<uintptr_t>(instance) & (ALIGNOF(Type) - 1), 0u)
-            << ": Bad boy, the buffer passed to placement new is not aligned!\n"
-               "This may break some stuff like SSE-based optimizations assuming the "
-               "<Type> objects are word aligned.";
+        DCHECK_EQ(reinterpret_cast<uintptr_t>(instance) & (ALIGNOF(Type) - 1), 0u);
+//             << ": Bad boy, the buffer passed to placement new is not aligned!\n"
+//                "This may break some stuff like SSE-based optimizations assuming the "
+//                "<Type> objects are word aligned.";
         // Use placement new to initialize our instance in our preallocated space.
         // The parenthesis is very important here to force POD type initialization.
         return new (instance) Type();

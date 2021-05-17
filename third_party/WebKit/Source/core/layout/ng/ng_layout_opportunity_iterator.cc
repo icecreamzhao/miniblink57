@@ -223,16 +223,12 @@ namespace {
     {
         if (opt_origin_point) {
             NGLogicalOffset origin_point = opt_origin_point.value();
-            DCHECK_GE(origin_point, space.Offset())
-                << "Origin point " << origin_point
-                << " should lay below the constraint space's offset " << space.Offset();
+            DCHECK_GE(origin_point, space.Offset()); // << "Origin point " << origin_point << " should lay below the constraint space's offset " << space.Offset();
         }
 
         if (opt_leader_point) {
             NGLogicalOffset leader_point = opt_leader_point.value();
-            DCHECK_GE(leader_point, space.Offset())
-                << "Leader point " << leader_point
-                << " should lay below the constraint space's offset " << space.Offset();
+            DCHECK_GE(leader_point, space.Offset()); // << "Leader point " << leader_point << " should lay below the constraint space's offset " << space.Offset();
         }
     }
 

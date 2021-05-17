@@ -60,8 +60,7 @@ NGFragmentBuilder& NGFragmentBuilder::AddChild(
     NGFragment* child,
     const NGLogicalOffset& child_offset)
 {
-    DCHECK_EQ(type_, NGPhysicalFragment::kFragmentBox)
-        << "Only box fragments can have children";
+    DCHECK_EQ(type_, NGPhysicalFragment::kFragmentBox);// << "Only box fragments can have children";
     children_.push_back(child->PhysicalFragment());
     offsets_.push_back(child_offset);
     // Collect child's out of flow descendants.

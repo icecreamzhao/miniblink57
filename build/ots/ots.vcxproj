@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -47,9 +47,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\tmp\ots\$(Configuration)\</IntDir>
-    <IncludePath>E:\WINDDK\3790.1830\inc\crt;E:\WINDDK\3790.1830\inc\wxp;E:\WINDDK\3790.1830\inc\wnet</IncludePath>
-    <ReferencePath>E:\WINDDK\3790.1830\lib\crt\i386;E:\WINDDK\3790.1830\lib\wxp\i386</ReferencePath>
-    <LibraryPath>E:\WINDDK\3790.1830\lib\crt\i386;E:\WINDDK\3790.1830\lib\wxp\i386</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -58,7 +59,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,9 +76,9 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>USING_VC6RT=1;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USING_VC6RT=0;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\WINDDK\3790.1830\inc\crt;E:\WINDDK\3790.1830\inc\wnet;E:\WINDDK\3790.1830\inc\wxp;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>

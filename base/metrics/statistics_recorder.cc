@@ -152,9 +152,7 @@ HistogramBase* StatisticsRecorder::RegisterOrDeleteDuplicate(
                 histogram_to_return = histogram;
             } else {
                 // We already have one histogram with this name.
-                DCHECK_EQ(histogram->histogram_name(),
-                    it->second->histogram_name())
-                    << "hash collision";
+                DCHECK_EQ(histogram->histogram_name(), it->second->histogram_name()); // << "hash collision";
                 histogram_to_return = it->second;
                 histogram_to_delete = histogram;
             }

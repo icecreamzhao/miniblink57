@@ -92,8 +92,7 @@ namespace {
         const Closure& task,
         base::TimeDelta delay)
     {
-        DCHECK_EQ(delay.InMillisecondsRoundedUp(), 0)
-            << "WorkerPoolTaskRunner does not support non-zero delays";
+        DCHECK_EQ(delay.InMillisecondsRoundedUp(), 0); // << "WorkerPoolTaskRunner does not support non-zero delays";
         return WorkerPool::PostTask(from_here, task, tasks_are_slow_);
     }
 

@@ -9,8 +9,8 @@
 #include "third_party/WebKit/public/platform/WebURLLoader.h"
 
 namespace blink {
-WebURLRequest;
-WebURLLoaderClient;
+class WebURLRequest;
+class WebURLLoaderClient;
 }
 
 namespace net {

@@ -78,6 +78,9 @@
 #include <windows.h>
 #endif
 
+#undef max
+#undef min
+
 namespace base {
 
 class PlatformThreadHandle;

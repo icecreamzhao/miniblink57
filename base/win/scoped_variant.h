@@ -5,9 +5,9 @@
 #ifndef BASE_WIN_SCOPED_VARIANT_H_
 #define BASE_WIN_SCOPED_VARIANT_H_
 
+#include <windows.h>
 #include <oleauto.h>
 #include <stdint.h>
-#include <windows.h>
 
 #include "base/base_export.h"
 #include "base/macros.h"

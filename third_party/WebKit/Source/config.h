@@ -128,6 +128,17 @@
 
 #endif
 
+#include <array>
+#include <algorithm>
+#include <ratio>
+#include <chrono>
+#include <set>
+#include <map>
+#include <bitset>
+#include <unordered_set>
+#include <unordered_map>
+#include <mutex>
+
 #include "base/basictypes.h" // for int8...
 #include "platform/NotImplemented.h"
 

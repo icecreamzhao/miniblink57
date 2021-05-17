@@ -132,9 +132,8 @@ static bool inSameTreeAndOrdered(const Position& shouldBeFormer,
     const Position& shouldBeLater)
 {
     // Input positions must be canonical positions.
-    DCHECK_EQ(shouldBeFormer, canonicalPositionOf(shouldBeFormer))
-        << shouldBeFormer;
-    DCHECK_EQ(shouldBeLater, canonicalPositionOf(shouldBeLater)) << shouldBeLater;
+    DCHECK_EQ(shouldBeFormer, canonicalPositionOf(shouldBeFormer)); // << shouldBeFormer;
+    DCHECK_EQ(shouldBeLater, canonicalPositionOf(shouldBeLater)); // << shouldBeLater;
     return Position::commonAncestorTreeScope(shouldBeFormer, shouldBeLater) && comparePositions(shouldBeFormer, shouldBeLater) <= 0;
 }
 

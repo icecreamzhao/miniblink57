@@ -136,8 +136,7 @@ namespace trace_event {
         // Assert that pushes and pops are nested correctly. This DCHECK can be
         // hit if some TRACE_EVENT macro is unbalanced (a TRACE_EVENT_END* call
         // without a corresponding TRACE_EVENT_BEGIN).
-        DCHECK_EQ(trace_event_name, pseudo_stack_.back())
-            << "Encountered an unmatched TRACE_EVENT_END";
+        DCHECK_EQ(trace_event_name, pseudo_stack_.back()); // << "Encountered an unmatched TRACE_EVENT_END";
 
         pseudo_stack_.pop_back();
     }
@@ -159,8 +158,7 @@ namespace trace_event {
         if (task_contexts_.empty())
             return;
 
-        DCHECK_EQ(context, task_contexts_.back())
-            << "Encountered an unmatched context end";
+        DCHECK_EQ(context, task_contexts_.back()); // << "Encountered an unmatched context end";
         task_contexts_.pop_back();
     }
 

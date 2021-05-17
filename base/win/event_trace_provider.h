@@ -18,6 +18,59 @@
 #include "base/base_export.h"
 #include "base/macros.h"
 
+#undef max
+#undef min
+
+typedef struct  _TRACE_GUID_REGISTRATION {
+    LPCGUID Guid;            // Guid of data block being registered or updated.
+    HANDLE RegHandle;        // Guid Registration Handle is returned.
+} TRACE_GUID_REGISTRATION, * PTRACE_GUID_REGISTRATION;
+
+typedef ULONG64 TRACEHANDLE, *PTRACEHANDLE;
+
+typedef struct _EVENT_TRACE_HEADER {        // overlays WNODE_HEADER
+    USHORT          Size;                   // Size of entire record
+    union {
+        USHORT      FieldTypeFlags;         // Indicates valid fields
+        struct {
+            UCHAR   HeaderType;             // Header type - internal use only
+            UCHAR   MarkerFlags;            // Marker - internal use only
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
+    union {
+        ULONG       Version;
+        struct {
+            UCHAR   Type;                   // event type
+            UCHAR   Level;                  // trace instrumentation level
+            USHORT  Version;                // version of trace record
+        } Class;
+    } DUMMYUNIONNAME2;
+    ULONG           ThreadId;               // Thread Id
+    ULONG           ProcessId;              // Process Id
+    LARGE_INTEGER   TimeStamp;              // time when event happens
+    union {
+        GUID        Guid;                   // Guid that identifies event
+        ULONGLONG   GuidPtr;                // use with WNODE_FLAG_USE_GUID_PTR
+    } DUMMYUNIONNAME3;
+    union {
+        struct {
+            ULONG   KernelTime;             // Kernel Mode CPU ticks
+            ULONG   UserTime;               // User mode CPU ticks
+        } DUMMYSTRUCTNAME;
+        ULONG64     ProcessorTime;          // Processor Clock
+        struct {
+            ULONG   ClientContext;          // Reserved
+            ULONG   Flags;                  // Event Flags
+        } DUMMYSTRUCTNAME2;
+    } DUMMYUNIONNAME4;
+} EVENT_TRACE_HEADER, * PEVENT_TRACE_HEADER;
+
+typedef struct _MOF_FIELD {
+    ULONG64     DataPtr;    // Pointer to the field. Up to 64-bits only
+    ULONG       Length;     // Length of the MOF field
+    ULONG       DataType;   // Type of data
+} MOF_FIELD, * PMOF_FIELD;
+
 namespace base {
 namespace win {
 

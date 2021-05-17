@@ -14,6 +14,12 @@
 #ifndef BUILD_BUILD_CONFIG_H_
 #define BUILD_BUILD_CONFIG_H_
 
+#undef max
+#undef min
+
+#include <tuple>
+#include <utility>
+
 // A set of macros to use for platform detection.
 #if defined(__native_client__)
 // __native_client__ must be first, so that other OS_ defines are not set.
@@ -161,8 +167,8 @@
 #define TENCENT_CHANGES_ERROR_PAGE 1 //显示错误页面
 #define TENCENT_MESSAGE_OPT 1 //消息合并优化
 #define TENCENT_CHANGES_WML 1 //显示wml
+#define TENCENT_REPORT_SCREEN_STATUS 0
 
-
-
+#define ENABLE_TENCENT(x) TENCENT_#x
 
 #endif // BUILD_BUILD_CONFIG_H_

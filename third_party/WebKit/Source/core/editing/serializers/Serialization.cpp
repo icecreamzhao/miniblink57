@@ -462,7 +462,7 @@ static void fillContainerFromString(ContainerNode* paragraph,
         return;
     }
 
-    DCHECK_EQ(string.find('\n'), kNotFound) << string;
+    DCHECK_EQ(string.find('\n'), kNotFound); // << string;
 
     Vector<String> tabList;
     string.split('\t', true, tabList);

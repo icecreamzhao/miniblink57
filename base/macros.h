@@ -10,6 +10,16 @@
 #ifndef BASE_MACROS_H_
 #define BASE_MACROS_H_
 
+#include <xlocnum>
+#include <xiosbase>
+#include <iterator>
+#include <unordered_map>
+#include <unordered_set>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <bitset>
+
 #include <stddef.h> // For size_t.
 
 // Put this in the declarations for a class to be uncopyable.

@@ -132,16 +132,17 @@ namespace win {
         bool has_app_id = (properties.options & ShortcutProperties::PROPERTIES_APP_ID) != 0;
         bool has_dual_mode = (properties.options & ShortcutProperties::PROPERTIES_DUAL_MODE) != 0;
         if ((has_app_id || has_dual_mode) && GetVersion() >= VERSION_WIN7) {
-            ScopedComPtr<IPropertyStore> property_store;
-            if (FAILED(property_store.QueryFrom(i_shell_link.get())) || !property_store.get())
-                return false;
-
-            if (has_app_id && !SetAppIdForPropertyStore(property_store.get(), properties.app_id.c_str())) {
-                return false;
-            }
-            if (has_dual_mode && !SetBooleanValueForPropertyStore(property_store.get(), PKEY_AppUserModel_IsDualMode, properties.dual_mode)) {
-                return false;
-            }
+//             ScopedComPtr<IPropertyStore> property_store;
+//             if (FAILED(property_store.QueryFrom(i_shell_link.get())) || !property_store.get())
+//                 return false;
+// 
+//             if (has_app_id && !SetAppIdForPropertyStore(property_store.get(), properties.app_id.c_str())) {
+//                 return false;
+//             }
+//             if (has_dual_mode && !SetBooleanValueForPropertyStore(property_store.get(), PKEY_AppUserModel_IsDualMode, properties.dual_mode)) {
+//                 return false;
+//             }
+            DebugBreak();
         }
 
         // Release the interfaces to the old shortcut to make sure it doesn't prevent
@@ -263,23 +264,24 @@ namespace win {
             }
 
             if (options & ShortcutProperties::PROPERTIES_DUAL_MODE) {
-                ScopedPropVariant pv_dual_mode;
-                if (property_store->GetValue(PKEY_AppUserModel_IsDualMode,
-                        pv_dual_mode.Receive())
-                    != S_OK) {
-                    return false;
-                }
-                switch (pv_dual_mode.get().vt) {
-                case VT_EMPTY:
-                    properties->set_dual_mode(false);
-                    break;
-                case VT_BOOL:
-                    properties->set_dual_mode(pv_dual_mode.get().boolVal == VARIANT_TRUE);
-                    break;
-                default:
-                    NOTREACHED() << "Unexpected variant type: " << pv_dual_mode.get().vt;
-                    return false;
-                }
+//                 ScopedPropVariant pv_dual_mode;
+//                 if (property_store->GetValue(PKEY_AppUserModel_IsDualMode,
+//                         pv_dual_mode.Receive())
+//                     != S_OK) {
+//                     return false;
+//                 }
+//                 switch (pv_dual_mode.get().vt) {
+//                 case VT_EMPTY:
+//                     properties->set_dual_mode(false);
+//                     break;
+//                 case VT_BOOL:
+//                     properties->set_dual_mode(pv_dual_mode.get().boolVal == VARIANT_TRUE);
+//                     break;
+//                 default:
+//                     NOTREACHED() << "Unexpected variant type: " << pv_dual_mode.get().vt;
+//                     return false;
+//                 }
+                DebugBreak();
             }
         }
 

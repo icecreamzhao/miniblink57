@@ -39,18 +39,20 @@ namespace win {
 
     ULONG EtwTraceProvider::EnableEvents(void* buffer)
     {
-        session_handle_ = ::GetTraceLoggerHandle(buffer);
-        if (NULL == session_handle_) {
-            return ::GetLastError();
-        }
-
-        enable_flags_ = ::GetTraceEnableFlags(session_handle_);
-        enable_level_ = ::GetTraceEnableLevel(session_handle_);
-
-        // Give subclasses a chance to digest the state change.
-        OnEventsEnabled();
-
-        return ERROR_SUCCESS;
+//         session_handle_ = ::GetTraceLoggerHandle(buffer);
+//         if (NULL == session_handle_) {
+//             return ::GetLastError();
+//         }
+// 
+//         enable_flags_ = ::GetTraceEnableFlags(session_handle_);
+//         enable_level_ = ::GetTraceEnableLevel(session_handle_);
+// 
+//         // Give subclasses a chance to digest the state change.
+//         OnEventsEnabled();
+// 
+//         return ERROR_SUCCESS;
+        DebugBreak();
+        return E_FAIL;
     }
 
     ULONG EtwTraceProvider::DisableEvents()
@@ -90,60 +92,69 @@ namespace win {
 
     ULONG EtwTraceProvider::Register()
     {
-        if (provider_name_ == GUID_NULL)
-            return ERROR_INVALID_NAME;
-
-        return ::RegisterTraceGuids(ControlCallback, this, &provider_name_,
-            1, &obligatory_guid_registration_, NULL, NULL, &registration_handle_);
+//         if (provider_name_ == GUID_NULL)
+//             return ERROR_INVALID_NAME;
+// 
+//         return ::RegisterTraceGuids(ControlCallback, this, &provider_name_,
+//             1, &obligatory_guid_registration_, NULL, NULL, &registration_handle_);
+        DebugBreak();
+        return E_FAIL;
     }
 
     ULONG EtwTraceProvider::Unregister()
     {
         // If a session is active, notify subclasses that it's going away.
-        if (session_handle_ != NULL)
-            DisableEvents();
-
-        ULONG ret = ::UnregisterTraceGuids(registration_handle_);
-
-        registration_handle_ = NULL;
-
-        return ret;
+//         if (session_handle_ != NULL)
+//             DisableEvents();
+// 
+//         ULONG ret = ::UnregisterTraceGuids(registration_handle_);
+// 
+//         registration_handle_ = NULL;
+// 
+//         return ret;
+        DebugBreak();
+        return E_FAIL;
     }
 
     ULONG EtwTraceProvider::Log(const EtwEventClass& event_class,
         EtwEventType type, EtwEventLevel level, const char* message)
     {
-        if (NULL == session_handle_ || enable_level_ < level)
-            return ERROR_SUCCESS; // No one listening.
-
-        EtwMofEvent<1> event(event_class, type, level);
-
-        event.fields[0].DataPtr = reinterpret_cast<ULONG64>(message);
-        event.fields[0].Length = message ? static_cast<ULONG>(sizeof(message[0]) * (1 + strlen(message))) : 0;
-
-        return ::TraceEvent(session_handle_, &event.header);
+//         if (NULL == session_handle_ || enable_level_ < level)
+//             return ERROR_SUCCESS; // No one listening.
+// 
+//         EtwMofEvent<1> event(event_class, type, level);
+// 
+//         event.fields[0].DataPtr = reinterpret_cast<ULONG64>(message);
+//         event.fields[0].Length = message ? static_cast<ULONG>(sizeof(message[0]) * (1 + strlen(message))) : 0;
+// 
+//         return ::TraceEvent(session_handle_, &event.header);
+        DebugBreak();
+        return E_FAIL;
     }
 
-    ULONG EtwTraceProvider::Log(const EtwEventClass& event_class,
-        EtwEventType type, EtwEventLevel level, const wchar_t* message)
+    ULONG EtwTraceProvider::Log(const EtwEventClass& event_class, EtwEventType type, EtwEventLevel level, const wchar_t* message)
     {
-        if (NULL == session_handle_ || enable_level_ < level)
-            return ERROR_SUCCESS; // No one listening.
-
-        EtwMofEvent<1> event(event_class, type, level);
-
-        event.fields[0].DataPtr = reinterpret_cast<ULONG64>(message);
-        event.fields[0].Length = message ? static_cast<ULONG>(sizeof(message[0]) * (1 + wcslen(message))) : 0;
-
-        return ::TraceEvent(session_handle_, &event.header);
+//         if (NULL == session_handle_ || enable_level_ < level)
+//             return ERROR_SUCCESS; // No one listening.
+// 
+//         EtwMofEvent<1> event(event_class, type, level);
+// 
+//         event.fields[0].DataPtr = reinterpret_cast<ULONG64>(message);
+//         event.fields[0].Length = message ? static_cast<ULONG>(sizeof(message[0]) * (1 + wcslen(message))) : 0;
+// 
+//         return ::TraceEvent(session_handle_, &event.header);
+        DebugBreak();
+        return E_FAIL;
     }
 
     ULONG EtwTraceProvider::Log(EVENT_TRACE_HEADER* event)
     {
-        if (enable_level_ < event->Class.Level)
-            return ERROR_SUCCESS;
-
-        return ::TraceEvent(session_handle_, event);
+//         if (enable_level_ < event->Class.Level)
+//             return ERROR_SUCCESS;
+// 
+//         return ::TraceEvent(session_handle_, event);
+        DebugBreak();
+        return E_FAIL;
     }
 
 } // namespace win

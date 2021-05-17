@@ -4,6 +4,7 @@
 
 #include "cc/layers/layer_position_constraint.h"
 //#include "cc/proto/layer_position_constraint.pb.h"
+#include <windows.h>
 
 namespace cc {
 

@@ -75,8 +75,8 @@ namespace {
         static const char* const texts[] = { "CodeUnit", "BackwardDeletion",
             "GraphemeCluster" };
         const auto& it = std::begin(texts) + static_cast<size_t>(type);
-        DCHECK_GE(it, std::begin(texts)) << "Unknown PositionMoveType value";
-        DCHECK_LT(it, std::end(texts)) << "Unknown PositionMoveType value";
+        DCHECK_GE(it, std::begin(texts)); // << "Unknown PositionMoveType value";
+        DCHECK_LT(it, std::end(texts)); // << "Unknown PositionMoveType value";
         return os << *it;
     }
 

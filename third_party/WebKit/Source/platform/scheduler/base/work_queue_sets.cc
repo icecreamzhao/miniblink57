@@ -68,8 +68,7 @@ namespace scheduler {
             bool has_enqueue_order = work_queue->GetFrontTaskEnqueueOrder(&enqueue_order);
             DCHECK(has_enqueue_order);
             size_t set_index = work_queue->work_queue_set_index();
-            DCHECK_LT(set_index, work_queue_heaps_.size()) << " set_index = "
-                                                           << set_index;
+            DCHECK_LT(set_index, work_queue_heaps_.size()); // << " set_index = " << set_index;
             // |work_queue| should not be in work_queue_heaps_[set_index].
             DCHECK(!work_queue->heap_handle().IsValid());
             work_queue_heaps_[set_index].insert({ enqueue_order, work_queue });
@@ -82,9 +81,8 @@ namespace scheduler {
             DCHECK_EQ(this, work_queue->work_queue_sets());
             DCHECK_LT(set_index, work_queue_heaps_.size());
             DCHECK(work_queue->heap_handle().IsValid());
-            DCHECK(!work_queue_heaps_[set_index].empty()) << " set_index = " << set_index;
-            DCHECK_EQ(work_queue_heaps_[set_index].min().value, work_queue)
-                << " set_index = " << set_index;
+            DCHECK(!work_queue_heaps_[set_index].empty()); // << " set_index = " << set_index;
+            DCHECK_EQ(work_queue_heaps_[set_index].min().value, work_queue); // << " set_index = " << set_index;
             EnqueueOrder enqueue_order;
             if (work_queue->GetFrontTaskEnqueueOrder(&enqueue_order)) {
                 // O(log n)
@@ -133,8 +131,7 @@ namespace scheduler {
 
         bool WorkQueueSets::IsSetEmpty(size_t set_index) const
         {
-            DCHECK_LT(set_index, work_queue_heaps_.size()) << " set_index = "
-                                                           << set_index;
+            DCHECK_LT(set_index, work_queue_heaps_.size()); // << " set_index = " << set_index;
             return work_queue_heaps_[set_index].empty();
         }
 

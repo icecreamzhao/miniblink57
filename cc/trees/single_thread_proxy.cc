@@ -510,10 +510,8 @@ void SingleThreadProxy::CompositeImmediately(base::TimeTicks frame_begin_time)
         DoBeginMainFrame(begin_frame_args);
         DoCommit();
 
-        DCHECK_EQ(
-            0u,
-            layer_tree_host_->GetSwapPromiseManager()->num_queued_swap_promises())
-            << "Commit should always succeed and transfer promises.";
+        DCHECK_EQ(0u, layer_tree_host_->GetSwapPromiseManager()->num_queued_swap_promises());
+            //<< "Commit should always succeed and transfer promises.";
     }
 
     // Finish the impl frame.

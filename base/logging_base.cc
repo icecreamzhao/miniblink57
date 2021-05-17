@@ -125,7 +125,7 @@ namespace {
 
     // Helper functions to wrap platform differences.
 
-    int32 CurrentProcessId()
+    int32_t CurrentProcessId()
     {
 #if defined(OS_WIN)
         return GetCurrentProcessId();
@@ -134,7 +134,7 @@ namespace {
 #endif
     }
 
-    uint64 TickCount()
+    uint64_t TickCount()
     {
 #if defined(OS_WIN)
         return GetTickCount();
@@ -673,8 +673,10 @@ void LogMessage::Init(const char* file, int line)
                 << std::setw(2) << tm_time->tm_sec
                 << ':';
     }
+
     if (g_log_tickcount)
         stream_ << TickCount() << ':';
+
     if (severity_ >= 0)
         stream_ << log_severity_name(severity_);
     else

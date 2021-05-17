@@ -51,6 +51,7 @@
 #include "wtf/CurrentTime.h"
 #include "wtf/LeakAnnotations.h"
 #include "wtf/allocator/Partitions.h"
+#include "wtf/allocator/PageAllocator.h"
 
 #ifdef ANNOTATE_CONTIGUOUS_CONTAINER
 // FIXME: have ContainerAnnotations.h define an ENABLE_-style name instead.
@@ -1376,11 +1377,10 @@ void NormalPage::removeFromHeap()
 #if !DCHECK_IS_ON() && !defined(LEAK_SANITIZER) && !defined(ADDRESS_SANITIZER)
 static void discardPages(Address begin, Address end)
 {
-    uintptr_t beginAddress = WTF::RoundUpToSystemPage(reinterpret_cast<uintptr_t>(begin));
-    uintptr_t endAddress = WTF::RoundDownToSystemPage(reinterpret_cast<uintptr_t>(end));
+    uintptr_t beginAddress = WTF::roundUpToSystemPage(reinterpret_cast<uintptr_t>(begin));
+    uintptr_t endAddress = WTF::roundDownToSystemPage(reinterpret_cast<uintptr_t>(end));
     if (beginAddress < endAddress)
-        WTF::DiscardSystemPages(reinterpret_cast<void*>(beginAddress),
-            endAddress - beginAddress);
+        WTF::discardSystemPages(reinterpret_cast<void*>(beginAddress), endAddress - beginAddress);
 }
 #endif
 

@@ -12,6 +12,12 @@
 #include "third_party/WebKit/Source/platform/weborigin/Referrer.h"
 #include "ui/gfx/geometry/rect.h"
 
+#if !defined(_INLINE_VAR) 
+#pragma message("1111")
+#else
+#pragma message("2222")
+#endif
+
 namespace content {
 
 RenderViewHost::RenderViewHost()

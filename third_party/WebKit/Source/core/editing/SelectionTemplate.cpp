@@ -24,15 +24,14 @@ SelectionTemplate<Strategy>::SelectionTemplate(const SelectionTemplate& other)
     DCHECK(other.assertValid());
     if (!m_hasTrailingWhitespace)
         return;
-    DCHECK_EQ(m_granularity, WordGranularity) << *this;
+    DCHECK_EQ(m_granularity, WordGranularity); // << *this;
 }
 
 template <typename Strategy>
 SelectionTemplate<Strategy>::SelectionTemplate() = default;
 
 template <typename Strategy>
-bool SelectionTemplate<Strategy>::operator==(
-    const SelectionTemplate& other) const
+bool SelectionTemplate<Strategy>::operator==(const SelectionTemplate& other) const
 {
     DCHECK(assertValid());
     DCHECK(other.assertValid());
@@ -40,7 +39,7 @@ bool SelectionTemplate<Strategy>::operator==(
         return other.isNone();
     if (other.isNone())
         return false;
-    DCHECK_EQ(m_base.document(), other.document()) << *this << ' ' << other;
+    DCHECK_EQ(m_base.document(), other.document()); // << *this << ' ' << other;
     return m_base == other.m_base && m_extent == other.m_extent && m_affinity == other.m_affinity && m_granularity == other.m_granularity && m_hasTrailingWhitespace == other.m_hasTrailingWhitespace && m_isDirectional == other.m_isDirectional;
 }
 
@@ -82,7 +81,7 @@ bool SelectionTemplate<Strategy>::assertValidFor(
         return false;
     if (m_base.isNull())
         return true;
-    DCHECK_EQ(m_base.document(), document) << *this;
+    DCHECK_EQ(m_base.document(), document); // << *this;
     return true;
 }
 

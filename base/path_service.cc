@@ -5,9 +5,9 @@
 #include "base/path_service.h"
 
 #if defined(OS_WIN)
+#include <windows.h>
 #include <shellapi.h>
 #include <shlobj.h>
-#include <windows.h>
 #endif
 
 #include "base/containers/hash_tables.h"
@@ -241,7 +241,7 @@ bool PathService::OverrideAndCreateIfNeeded(int key,
 {
     PathData* path_data = GetPathData();
     DCHECK(path_data);
-    DCHECK_GT(key, DIR_CURRENT) << "invalid path key";
+    DCHECK_GT(key, DIR_CURRENT); // << "invalid path key";
 
     FilePath file_path = path;
 

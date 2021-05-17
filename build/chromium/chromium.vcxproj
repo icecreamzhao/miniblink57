@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -68,12 +68,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_HAS_CONSTEXPR=0;ANGLE_ENABLE_GLSL;USE_AURA;OS_WIN;BUILDING_CEF_SHARED;USING_CEF_SHARED;_WINDOWS;BLINK_IMPLEMENTATION=1;ENABLE_ASSERT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../;../../v8/;../../v8/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/gpu;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -81,6 +82,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <OutputFile>G:\mycode\miniblink57\Release\chromium.lib</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="..\..\url\third_party\mozilla\LICENSE.txt" />
@@ -1410,7 +1414,6 @@
     <None Include="..\..\cc\surfaces\OWNERS" />
     <None Include="..\..\url\OWNERS" />
     <None Include="..\..\url\third_party\mozilla\README.chromium" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1488,8 +1488,7 @@ void ReplaceSelectionCommand::doApply(EditingState* editingState)
         removeRedundantStylesAndKeepStyleSpanInline(insertedNodes, editingState);
         if (editingState->isAborted())
             return;
-        DCHECK_EQ(insertedNodes.refNode()->isConnected(), refNodeWasConnected)
-            << insertedNodes.refNode();
+        DCHECK_EQ(insertedNodes.refNode()->isConnected(), refNodeWasConnected); // << insertedNodes.refNode();
     }
 
     if (m_sanitizeFragment && insertedNodes.firstNodeInserted()) {

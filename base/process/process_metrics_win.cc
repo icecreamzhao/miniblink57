@@ -15,6 +15,28 @@
 #include "base/logging.h"
 #include "base/sys_info.h"
 
+inline BOOL GetProcessMemoryInfoXp(HANDLE Process, void* ppsmemCounters, DWORD cb)
+{
+    typedef BOOL(__stdcall* PFN_GetProcessMemoryInfo)(HANDLE Process, void* ppsmemCounters, DWORD cb);
+    static PFN_GetProcessMemoryInfo s_GetProcessMemoryInfo = NULL;
+
+    static BOOL s_is_init = FALSE;
+    if (!s_is_init) {
+        HMODULE handle = GetModuleHandle(L"Kernel32.dll");
+        s_GetProcessMemoryInfo = (PFN_GetProcessMemoryInfo)GetProcAddress(handle, "GetProcessMemoryInfo");
+        if (!s_GetProcessMemoryInfo) {
+            handle = LoadLibraryW(L"Psapi.dll");
+            s_GetProcessMemoryInfo = (PFN_GetProcessMemoryInfo)GetProcAddress(handle, "GetProcessMemoryInfo");
+        }
+        s_is_init = TRUE;
+    }
+
+    if (s_GetProcessMemoryInfo)
+        return s_GetProcessMemoryInfo(Process, ppsmemCounters, cb);
+
+    return FALSE;
+}
+
 namespace base {
 namespace {
 
@@ -50,7 +72,7 @@ ProcessMetrics* ProcessMetrics::CreateProcessMetrics(ProcessHandle process)
 size_t ProcessMetrics::GetPagefileUsage() const
 {
     PROCESS_MEMORY_COUNTERS pmc;
-    if (GetProcessMemoryInfo(process_, &pmc, sizeof(pmc))) {
+    if (GetProcessMemoryInfoXp(process_, &pmc, sizeof(pmc))) {
         return pmc.PagefileUsage;
     }
     return 0;
@@ -60,7 +82,7 @@ size_t ProcessMetrics::GetPagefileUsage() const
 size_t ProcessMetrics::GetPeakPagefileUsage() const
 {
     PROCESS_MEMORY_COUNTERS pmc;
-    if (GetProcessMemoryInfo(process_, &pmc, sizeof(pmc))) {
+    if (GetProcessMemoryInfoXp(process_, &pmc, sizeof(pmc))) {
         return pmc.PeakPagefileUsage;
     }
     return 0;
@@ -70,7 +92,7 @@ size_t ProcessMetrics::GetPeakPagefileUsage() const
 size_t ProcessMetrics::GetWorkingSetSize() const
 {
     PROCESS_MEMORY_COUNTERS pmc;
-    if (GetProcessMemoryInfo(process_, &pmc, sizeof(pmc))) {
+    if (GetProcessMemoryInfoXp(process_, &pmc, sizeof(pmc))) {
         return pmc.WorkingSetSize;
     }
     return 0;
@@ -80,7 +102,7 @@ size_t ProcessMetrics::GetWorkingSetSize() const
 size_t ProcessMetrics::GetPeakWorkingSetSize() const
 {
     PROCESS_MEMORY_COUNTERS pmc;
-    if (GetProcessMemoryInfo(process_, &pmc, sizeof(pmc))) {
+    if (GetProcessMemoryInfoXp(process_, &pmc, sizeof(pmc))) {
         return pmc.PeakWorkingSetSize;
     }
     return 0;
@@ -94,7 +116,7 @@ bool ProcessMetrics::GetMemoryBytes(size_t* private_bytes,
     // information is simply not available. Hence, we will return 0 on unsupported
     // OSes. Unlike most Win32 API, we don't need to initialize the "cb" member.
     PROCESS_MEMORY_COUNTERS_EX pmcx;
-    if (private_bytes && GetProcessMemoryInfo(process_, reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&pmcx), sizeof(pmcx))) {
+    if (private_bytes && GetProcessMemoryInfoXp(process_, reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&pmcx), sizeof(pmcx))) {
         *private_bytes = pmcx.PrivateUsage;
     }
 
@@ -147,69 +169,71 @@ void ProcessMetrics::GetCommittedKBytes(CommittedKBytes* usage) const
 
 bool ProcessMetrics::GetWorkingSetKBytes(WorkingSetKBytes* ws_usage) const
 {
-    size_t ws_private = 0;
-    size_t ws_shareable = 0;
-    size_t ws_shared = 0;
-
-    DCHECK(ws_usage);
-    memset(ws_usage, 0, sizeof(*ws_usage));
-
-    DWORD number_of_entries = 4096; // Just a guess.
-    PSAPI_WORKING_SET_INFORMATION* buffer = NULL;
-    int retries = 5;
-    for (;;) {
-        DWORD buffer_size = sizeof(PSAPI_WORKING_SET_INFORMATION) + (number_of_entries * sizeof(PSAPI_WORKING_SET_BLOCK));
-
-        // if we can't expand the buffer, don't leak the previous
-        // contents or pass a NULL pointer to QueryWorkingSet
-        PSAPI_WORKING_SET_INFORMATION* new_buffer = reinterpret_cast<PSAPI_WORKING_SET_INFORMATION*>(
-            realloc(buffer, buffer_size));
-        if (!new_buffer) {
-            free(buffer);
-            return false;
-        }
-        buffer = new_buffer;
-
-        // Call the function once to get number of items
-        if (QueryWorkingSet(process_, buffer, buffer_size))
-            break; // Success
-
-        if (GetLastError() != ERROR_BAD_LENGTH) {
-            free(buffer);
-            return false;
-        }
-
-        number_of_entries = static_cast<DWORD>(buffer->NumberOfEntries);
-
-        // Maybe some entries are being added right now. Increase the buffer to
-        // take that into account.
-        number_of_entries = static_cast<DWORD>(number_of_entries * 1.25);
-
-        if (--retries == 0) {
-            free(buffer); // If we're looping, eventually fail.
-            return false;
-        }
-    }
-
-    // On windows 2000 the function returns 1 even when the buffer is too small.
-    // The number of entries that we are going to parse is the minimum between the
-    // size we allocated and the real number of entries.
-    number_of_entries = std::min(number_of_entries, static_cast<DWORD>(buffer->NumberOfEntries));
-    for (unsigned int i = 0; i < number_of_entries; i++) {
-        if (buffer->WorkingSetInfo[i].Shared) {
-            ws_shareable++;
-            if (buffer->WorkingSetInfo[i].ShareCount > 1)
-                ws_shared++;
-        } else {
-            ws_private++;
-        }
-    }
-
-    ws_usage->priv = ws_private * PAGESIZE_KB;
-    ws_usage->shareable = ws_shareable * PAGESIZE_KB;
-    ws_usage->shared = ws_shared * PAGESIZE_KB;
-    free(buffer);
-    return true;
+    DebugBreak();
+    return false;
+//     size_t ws_private = 0;
+//     size_t ws_shareable = 0;
+//     size_t ws_shared = 0;
+// 
+//     DCHECK(ws_usage);
+//     memset(ws_usage, 0, sizeof(*ws_usage));
+// 
+//     DWORD number_of_entries = 4096; // Just a guess.
+//     PSAPI_WORKING_SET_INFORMATION* buffer = NULL;
+//     int retries = 5;
+//     for (;;) {
+//         DWORD buffer_size = sizeof(PSAPI_WORKING_SET_INFORMATION) + (number_of_entries * sizeof(PSAPI_WORKING_SET_BLOCK));
+// 
+//         // if we can't expand the buffer, don't leak the previous
+//         // contents or pass a NULL pointer to QueryWorkingSet
+//         PSAPI_WORKING_SET_INFORMATION* new_buffer = reinterpret_cast<PSAPI_WORKING_SET_INFORMATION*>(
+//             realloc(buffer, buffer_size));
+//         if (!new_buffer) {
+//             free(buffer);
+//             return false;
+//         }
+//         buffer = new_buffer;
+// 
+//         // Call the function once to get number of items
+//         if (QueryWorkingSet(process_, buffer, buffer_size))
+//             break; // Success
+// 
+//         if (GetLastError() != ERROR_BAD_LENGTH) {
+//             free(buffer);
+//             return false;
+//         }
+// 
+//         number_of_entries = static_cast<DWORD>(buffer->NumberOfEntries);
+// 
+//         // Maybe some entries are being added right now. Increase the buffer to
+//         // take that into account.
+//         number_of_entries = static_cast<DWORD>(number_of_entries * 1.25);
+// 
+//         if (--retries == 0) {
+//             free(buffer); // If we're looping, eventually fail.
+//             return false;
+//         }
+//     }
+// 
+//     // On windows 2000 the function returns 1 even when the buffer is too small.
+//     // The number of entries that we are going to parse is the minimum between the
+//     // size we allocated and the real number of entries.
+//     number_of_entries = std::min(number_of_entries, static_cast<DWORD>(buffer->NumberOfEntries));
+//     for (unsigned int i = 0; i < number_of_entries; i++) {
+//         if (buffer->WorkingSetInfo[i].Shared) {
+//             ws_shareable++;
+//             if (buffer->WorkingSetInfo[i].ShareCount > 1)
+//                 ws_shared++;
+//         } else {
+//             ws_private++;
+//         }
+//     }
+// 
+//     ws_usage->priv = ws_private * PAGESIZE_KB;
+//     ws_usage->shareable = ws_shareable * PAGESIZE_KB;
+//     ws_usage->shared = ws_shared * PAGESIZE_KB;
+//     free(buffer);
+//     return true;
 }
 
 static uint64_t FileTimeToUTC(const FILETIME& ftime)
